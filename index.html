@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="scripts.js"></script>
 
   <style>
   body {
@@ -18,17 +19,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  #background-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: -1;
   }
 
   #availabilityButton {
@@ -73,6 +63,7 @@
     text-align: left;
     font-size: 16px;
     line-height: 1.6;
+    display: none;
   }
 
   #summary h2 {
@@ -102,9 +93,7 @@
 </head>
 <body>
 
-<div id="background-overlay"></div>
-
-<!-- Password Overlay (still commented out) -->
+<!-- Password Overlay (still commented out, as requested) -->
 <!-- 
 <div id="passwordOverlay"> 
   <div id="passwordBox">
@@ -118,7 +107,7 @@
 
 <button id="availabilityButton">Browse Availability</button>
 
-<div id="summary" style="display: none;">
+<div id="summary">
   <p id="details"></p>
   <div id="promoContainer" style="display: none;">
     <input id="promo" type="text" placeholder="enter friends & family secret code" oninput="updateSummary(document.getElementById('dateRange')._flatpickr.selectedDates)" />
@@ -133,6 +122,5 @@
   </p>
 </div>
 
-<script src="scripts.js"></script>
 </body>
 </html>
