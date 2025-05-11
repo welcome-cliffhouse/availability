@@ -10,7 +10,7 @@
 
   <style>
   body {
-    background: url('./assets/IMG_2083.jpg') no-repeat center center fixed;
+    background: url('/assets/IMG_2083.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     margin: 0;
@@ -79,6 +79,58 @@
     margin: 12px 0;
   }
 
+  #promoContainer input {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  #request {
+    max-width: 92vw;
+    margin: 24px auto;
+    text-align: left;
+  }
+
+  #request label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  #request input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  #request button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 30px;
+    border: none;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: background-color 0.3s ease;
+  }
+
+  #request button:hover {
+    background-color: #43a047;
+  }
+
   #confirmationMessage {
     display: none;
     text-align: center;
@@ -89,6 +141,31 @@
     text-shadow: 0 1px 3px rgba(0,0,0,0.7);
   }
 
+  .fade-blur-out {
+    opacity: 0;
+    filter: blur(10px);
+    transition: opacity 0.7s ease, filter 0.7s ease;
+  }
+
+  #confirmationText {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 36px;
+    animation: typing 2.5s steps(40, end), blink 0.8s step-end infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid white;
+    max-width: 100%;
+    display: inline-block;
+  }
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+
+  @keyframes blink {
+    50% { border-color: transparent }
+  }
   </style>
 </head>
 <body>
@@ -107,12 +184,23 @@
 
 <button id="availabilityButton">Browse Availability</button>
 
-<div id="summary">
+<div id="summary" style="display: none;">
   <p id="details"></p>
   <div id="promoContainer" style="display: none;">
     <input id="promo" type="text" placeholder="enter friends & family secret code" oninput="updateSummary(document.getElementById('dateRange')._flatpickr.selectedDates)" />
   </div>
   <p id="total"></p>
+
+  <h3 style="text-align: center; margin-top: 30px;">To request your stay, please fill in the details below:</h3>
+  <div id="request">
+    <label>Your Name:<br><input id="guestName" type="text" required></label>
+    <label>Your Email:<br><input id="guestEmail" type="email" required></label>
+    <label>Your Phone Number:<br><input id="guestPhone" type="text" required></label>
+    <button onclick="sendRequest()">Send Request</button>
+    <footer style="font-size: 9px; color: gray; text-align: center; margin-top: 20px;">
+      Private use only — by invitation of friends & family. Contributions are not payments for lodging, but help cover cleaning and upkeep costs of this shared home.
+    </footer>
+  </div>
 </div>
 
 <div id="confirmationMessage">
