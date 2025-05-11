@@ -1,3 +1,5 @@
+console.log("✅ scripts.js loaded successfully");
+
 // Fetch available dates from Google Sheets
 let availableDates = [];
 
@@ -34,8 +36,14 @@ function initCalendar() {
     // Open the calendar when the button is clicked
     document.getElementById("availabilityButton").addEventListener("click", () => {
         console.log("🟢 Button clicked — opening calendar...");
-        dateRangeInput._flatpickr.open();
+    
+        if (!dateRangeInput._flatpickr) {
+            console.error("⚠️ Flatpickr instance not found!");
+        } else {
+            dateRangeInput._flatpickr.open();
+        }
     });
+    
 }
 
 // Update the summary box
