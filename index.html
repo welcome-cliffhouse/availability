@@ -185,23 +185,29 @@
 <button id="availabilityButton">Browse Availability</button>
 
 <div id="summary" style="display: none;">
-  <p id="details"></p>
-  <div id="promoContainer" style="display: none;">
-    <input id="promo" type="text" placeholder="enter friends & family secret code" oninput="updateSummary(document.getElementById('dateRange')._flatpickr.selectedDates)" />
+    <h2 style="text-align: center;">Summary of Request</h2>
+    
+    <p id="details"></p>
+    
+    <!-- Promo Code Input -->
+    <div id="promoContainer" style="display: block; margin-bottom: 20px;">
+      <input id="promo" type="text" placeholder="enter friends & family secret code" oninput="updateSummary(document.getElementById('dateRange')._flatpickr.selectedDates)" />
+    </div>
+    
+    <p id="total"></p>
+  
+    <h3 style="text-align: center; margin-top: 30px;">To request your stay, please fill in the details below:</h3>
+    <div id="request">
+      <label>Your Name:<br><input id="guestName" type="text" required></label>
+      <label>Your Email:<br><input id="guestEmail" type="email" required></label>
+      <label>Your Phone Number:<br><input id="guestPhone" type="text" required></label>
+      <button onclick="sendRequest()">Send Request</button>
+      <footer style="font-size: 9px; color: gray; text-align: center; margin-top: 20px;">
+        Private use only — by invitation of friends & family. Contributions are not payments for lodging, but help cover cleaning and upkeep costs of this shared home.
+      </footer>
+    </div>
   </div>
-  <p id="total"></p>
-
-  <h3 style="text-align: center; margin-top: 30px;">To request your stay, please fill in the details below:</h3>
-  <div id="request">
-    <label>Your Name:<br><input id="guestName" type="text" required></label>
-    <label>Your Email:<br><input id="guestEmail" type="email" required></label>
-    <label>Your Phone Number:<br><input id="guestPhone" type="text" required></label>
-    <button onclick="sendRequest()">Send Request</button>
-    <footer style="font-size: 9px; color: gray; text-align: center; margin-top: 20px;">
-      Private use only — by invitation of friends & family. Contributions are not payments for lodging, but help cover cleaning and upkeep costs of this shared home.
-    </footer>
-  </div>
-</div>
+  
 
 <div id="confirmationMessage">
   <h1 id="confirmationText" class="typewriter">Request sent! I’ll be in touch soon 🌿</h1>
