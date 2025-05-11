@@ -16,34 +16,36 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
 
 // Initialize the Flatpickr once the dates are loaded
 function initCalendar() {
-    const dateRangeInput = document.createElement("input");
-    dateRangeInput.id = "dateRange";
-    dateRangeInput.style.display = "none";
-    document.body.appendChild(dateRangeInput);
+    // Only create the input if it doesn't already exist
+    let dateRangeInput = document.getElementById("dateRange");
+    if (!dateRangeInput) {
+        dateRangeInput = document.createElement("input");
+        dateRangeInput.id = "dateRange";
+        dateRangeInput.style.display = "none";
+        document.body.appendChild(dateRangeInput);
+    }
 
-    flatpickr(dateRangeInput, {
-        mode: "range",
-        dateFormat: "Y-m-d",
-        enable: availableDates.map(d => d.date),
-        onChange: (selectedDates) => {
-            if (selectedDates.length === 2) {
-                console.log("🗓️ Selected dates:", selectedDates);
-                updateSummary(selectedDates);
+    // Initialize Flatpickr only once
+    if (!dateRangeInput._flatpickr) {
+        flatpickr(dateRangeInput, {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            enable: availableDates.map(d => d.date),
+            onChange: (selectedDates) => {
+                if (selectedDates.length === 2) {
+                    console.log("🗓️ Selected dates:", selectedDates);
+                    updateSummary(selectedDates);
+                }
             }
-        }
-    });
+        });
+    }
 
     // Open the calendar when the button is clicked
-    document.getElementById("availabilityButton").addEventListener("click", () => {
+    const availabilityButton = document.getElementById("availabilityButton");
+    availabilityButton.addEventListener("click", () => {
         console.log("🟢 Button clicked — opening calendar...");
-    
-        if (!dateRangeInput._flatpickr) {
-            console.error("⚠️ Flatpickr instance not found!");
-        } else {
-            dateRangeInput._flatpickr.open();
-        }
+        dateRangeInput._flatpickr.open();
     });
-    
 }
 
 // Update the summary box
