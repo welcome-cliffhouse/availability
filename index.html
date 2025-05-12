@@ -299,9 +299,11 @@
     <p id="details"></p>
     
     <!-- Promo Code Input -->
-    <div id="promoContainer" style="display: block; margin-bottom: 20px;">
-      <input id="promo" type="text" placeholder="enter friends & family secret code" oninput="updateSummary(document.getElementById('dateRange')._flatpickr.selectedDates)" />
-    </div>
+<div id="promoContainer" style="display: block; margin-bottom: 20px;">
+    <input id="promo" type="text" placeholder="enter friends & family secret code" 
+    oninput="updateSummary(document.getElementById('dateRange')._flatpickr?.selectedDates || [])" />
+</div>
+
     
     <p id="total"></p>
   
