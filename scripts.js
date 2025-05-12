@@ -23,6 +23,7 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
         dateRangeInput.style.position = "absolute";
         dateRangeInput.style.opacity = "0";
         dateRangeInput.style.pointerEvents = "none";
+        dateRangeInput.style.zIndex = "-1";  // Make sure it's truly hidden
         document.body.appendChild(dateRangeInput);
     
         // Initialize Flatpickr
@@ -54,18 +55,10 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
         const availabilityButton = document.getElementById("availabilityButton");
         availabilityButton.addEventListener("click", () => {
             console.log("🟢 Button clicked — opening calendar...");
-            // Temporarily make the input visible to ensure focus
-            dateRangeInput.style.opacity = "1";
-            dateRangeInput.style.pointerEvents = "auto";
-            setTimeout(() => {
-                flatpickrInstance.open();
-                setTimeout(() => {
-                    dateRangeInput.style.opacity = "0";
-                    dateRangeInput.style.pointerEvents = "none";
-                }, 300); // Hide it again after the calendar is open
-            }, 100);
+            flatpickrInstance.open();
         });
     }
+    
     
 
 // Update the summary box
