@@ -16,44 +16,57 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
         console.error("⚠️ Error fetching availability:", error);
     });
 
-// Initialize the Flatpickr once the dates are loaded
-function initCalendar() {
-    const dateRangeInput = document.createElement("input");
-    dateRangeInput.id = "dateRange";
-    dateRangeInput.style.display = "none";
-    document.body.appendChild(dateRangeInput);
-
-    flatpickr(dateRangeInput, {
-        mode: "range",
-        dateFormat: "Y-m-d",
-        enable: availableDates.map(d => d.date),
-        onDayCreate: function(dObj, dStr, fp, dayElem) {
-            const dateStr = dayElem.dateObj.toISOString().split('T')[0];
-            if (rateMap[dateStr]) {
-                const priceTag = document.createElement("span");
-                priceTag.innerText = `$${rateMap[dateStr]}`;
-                priceTag.style.fontSize = "9px";
-                priceTag.style.lineHeight = "1";
-                priceTag.style.color = "#555";
-                priceTag.style.fontWeight = "500";
-                dayElem.appendChild(priceTag);
+    function initCalendar() {
+        // Create the hidden date range input
+        const dateRangeInput = document.createElement("input");
+        dateRangeInput.id = "dateRange";
+        dateRangeInput.style.position = "absolute";
+        dateRangeInput.style.opacity = "0";
+        dateRangeInput.style.pointerEvents = "none";
+        document.body.appendChild(dateRangeInput);
+    
+        // Initialize Flatpickr
+        const flatpickrInstance = flatpickr(dateRangeInput, {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            enable: availableDates.map(d => d.date),
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+                if (rateMap[dateStr]) {
+                    const priceTag = document.createElement("span");
+                    priceTag.innerText = `$${rateMap[dateStr]}`;
+                    priceTag.style.fontSize = "9px";
+                    priceTag.style.lineHeight = "1";
+                    priceTag.style.color = "#555";
+                    priceTag.style.fontWeight = "500";
+                    dayElem.appendChild(priceTag);
+                }
+            },
+            onChange: (selectedDates) => {
+                if (selectedDates.length === 2) {
+                    console.log("🗓️ Selected dates:", selectedDates);
+                    updateSummary(selectedDates);
+                }
             }
-        },
-        onChange: (selectedDates) => {
-            if (selectedDates.length === 2) {
-                console.log("🗓️ Selected dates:", selectedDates);
-                updateSummary(selectedDates);
-            }
-        }
-    });
-
-    // Open the calendar when the button is clicked
-    const availabilityButton = document.getElementById("availabilityButton");
-    availabilityButton.addEventListener("click", () => {
-        console.log("🟢 Button clicked — opening calendar...");
-        dateRangeInput._flatpickr.open();
-    });
-}
+        });
+    
+        // Open the calendar when the button is clicked
+        const availabilityButton = document.getElementById("availabilityButton");
+        availabilityButton.addEventListener("click", () => {
+            console.log("🟢 Button clicked — opening calendar...");
+            // Temporarily make the input visible to ensure focus
+            dateRangeInput.style.opacity = "1";
+            dateRangeInput.style.pointerEvents = "auto";
+            setTimeout(() => {
+                flatpickrInstance.open();
+                setTimeout(() => {
+                    dateRangeInput.style.opacity = "0";
+                    dateRangeInput.style.pointerEvents = "none";
+                }, 300); // Hide it again after the calendar is open
+            }, 100);
+        });
+    }
+    
 
 // Update the summary box
 function updateSummary(dates) {
