@@ -100,31 +100,57 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
             subtotal += rateMap[dateStr] || 0;
         }
     
-        // Promo code logic
-        const promoCode = document.getElementById("promo").value.trim();
+        const cleaningFee = 200;
         let discount = 0;
-        if (promoCode.toLowerCase() === "friends") {
-            discount = Math.min(100, subtotal * 0.15); // 15% discount, max $100
+        const promoCode = document.getElementById("promo").value.trim().toLowerCase();
+    
+        // Check for a valid promo code
+        if (promoCode) {
+            fetch(`https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=checkPromo&code=${promoCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.discount) {
+                        discount = Number(data.discount);
+                    }
+                    const total = subtotal + cleaningFee - discount;
+                    
+                    const summary = `
+                        <h3>Visit Details</h3>
+                        Arrive: ${checkIn}<br>
+                        Depart: ${checkOut}<br>
+                        Total Nights: ${nights}<br><br>
+                        Suggested Contribution: $${subtotal.toFixed(2)}<br>
+                        Cleaning Share: $${cleaningFee.toFixed(2)}<br>
+                        ${discount > 0 ? `Because we appreciate you: -$${discount.toFixed(2)}<br>` : '' }
+                        <strong>Suggested Total Contribution: $${total.toFixed(2)}</strong>
+                    `;
+    
+                    document.getElementById("details").innerHTML = summary;
+                    document.getElementById("promoContainer").style.display = "block";
+                    document.getElementById("summary").style.display = "block";
+                    document.getElementById("request").style.display = "block";
+                })
+                .catch(error => console.error("⚠️ Error fetching promo code:", error));
+        } else {
+            const total = subtotal + cleaningFee;
+            
+            const summary = `
+                <h3>Visit Details</h3>
+                Arrive: ${checkIn}<br>
+                Depart: ${checkOut}<br>
+                Total Nights: ${nights}<br><br>
+                Suggested Contribution: $${subtotal.toFixed(2)}<br>
+                Cleaning Share: $${cleaningFee.toFixed(2)}<br>
+                <strong>Suggested Total Contribution: $${total.toFixed(2)}</strong>
+            `;
+    
+            document.getElementById("details").innerHTML = summary;
+            document.getElementById("promoContainer").style.display = "block";
+            document.getElementById("summary").style.display = "block";
+            document.getElementById("request").style.display = "block";
         }
-    
-        const total = subtotal + 200 - discount;
-    
-        const summary = `
-            <h3>Visit Details</h3>
-            Arrive: ${checkIn}<br>
-            Depart: ${checkOut}<br>
-            Total Nights: ${nights}<br>
-            Suggested Contribution: $${subtotal.toFixed(2)}<br>
-            Cleaning Share: $200<br>
-            ${discount > 0 ? `Because we appreciate you: -$${discount.toFixed(2)}<br>` : '' }
-            <strong>Suggested Total Contribution: $${total.toFixed(2)}</strong>
-        `;
-    
-        document.getElementById("details").innerHTML = summary;
-        document.getElementById("promoContainer").style.display = "block";
-        document.getElementById("summary").style.display = "block";
-        document.getElementById("request").style.display = "block";
     }
+    
     
 function sendRequest() {
     const name = document.getElementById("guestName").value.trim();
