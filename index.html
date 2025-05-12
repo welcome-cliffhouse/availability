@@ -53,20 +53,7 @@
     transform: translateX(-50%) scale(0.97);
   }
 
-  /* Scrollbar styling to match the calendar */
-#summary::-webkit-scrollbar {
-    width: 8px;
-}
 
-#summary::-webkit-scrollbar-thumb {
-    background-color: #bbb;
-    border-radius: 10px;
-}
-
-#summary::-webkit-scrollbar-track {
-    background-color: #f4f4f4;
-    border-radius: 10px;
-}
 
  /* Center and Resize Calendar */
 .flatpickr-calendar {
@@ -164,10 +151,10 @@
     text-align: left;
     font-size: 16px;
     line-height: 1.6;
-    display: block;
     max-height: 70vh;
     overflow-y: auto;
     position: relative;
+    box-sizing: border-box;
 }
 
   #summary h2 {
@@ -182,7 +169,20 @@
     color: #333;
     margin: 12px 0;
   }
+  /* Scrollbar styling to match the calendar */
+  #summary::-webkit-scrollbar {
+    width: 8px;
+}
 
+#summary::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 10px;
+}
+
+#summary::-webkit-scrollbar-track {
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
   #promoContainer input {
     width: 100%;
     font-size: 16px;
