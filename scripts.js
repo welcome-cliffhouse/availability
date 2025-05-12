@@ -1,4 +1,5 @@
 console.log("✅ scripts.js loaded successfully");
+let promoCodes = {}; // Make sure this is globally scoped
 
 // Fetch available dates from Google Sheets
 let availableDates = [];
