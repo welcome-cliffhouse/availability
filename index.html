@@ -109,18 +109,24 @@
 /* Center price tags under dates */
 .flatpickr-day {
     font-size: 18px !important;
-    line-height: 2 !important;
-    padding: 0 !important;
+    line-height: 1.2 !important;
+    padding: 8px 0 20px 0 !important;  /* Extra space at the bottom for price */
     position: relative;
 }
 
+
+/* Center price tags below dates */
 .flatpickr-day span {
     display: block;
     font-size: 10px;
     color: #555;
     font-weight: 500;
-    line-height: 1.2;
-    margin-top: 2px;
+    line-height: 1;
+    margin-top: 4px;
+    position: absolute;
+    bottom: -4px;  /* Nudge it down to sit directly below the date */
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* Soften the look of previous/next month days */
