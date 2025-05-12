@@ -88,30 +88,44 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
     
     
 
-// Update the summary box
-function updateSummary(dates) {
-    const [start, end] = dates;
-    const checkIn = start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const checkOut = end.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const nights = (end - start) / (1000 * 60 * 60 * 24);
-
-    let subtotal = 0;
-    for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
-        const dateStr = d.toISOString().split('T')[0];
-        subtotal += rateMap[dateStr] || 0;
+    function updateSummary(dates) {
+        const [start, end] = dates;
+        const checkIn = start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const checkOut = end.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const nights = (end - start) / (1000 * 60 * 60 * 24);
+    
+        let subtotal = 0;
+        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+            const dateStr = d.toISOString().split('T')[0];
+            subtotal += rateMap[dateStr] || 0;
+        }
+    
+        // Promo code logic
+        const promoCode = document.getElementById("promo").value.trim();
+        let discount = 0;
+        if (promoCode.toLowerCase() === "friends") {
+            discount = Math.min(100, subtotal * 0.15); // 15% discount, max $100
+        }
+    
+        const total = subtotal + 200 - discount;
+    
+        const summary = `
+            <h3>Visit Details</h3>
+            Arrive: ${checkIn}<br>
+            Depart: ${checkOut}<br>
+            Total Nights: ${nights}<br>
+            Suggested Contribution: $${subtotal.toFixed(2)}<br>
+            Cleaning Share: $200<br>
+            ${discount > 0 ? `Because we appreciate you: -$${discount.toFixed(2)}<br>` : '' }
+            <strong>Suggested Total Contribution: $${total.toFixed(2)}</strong>
+        `;
+    
+        document.getElementById("details").innerHTML = summary;
+        document.getElementById("promoContainer").style.display = "block";
+        document.getElementById("summary").style.display = "block";
+        document.getElementById("request").style.display = "block";
     }
-
-    const summary = `
-        <h2>Visit Details</h2>
-        Arrive: ${checkIn}<br>
-        Depart: ${checkOut}<br>
-        Total Nights: ${nights}<br>
-        Total Cost: $${subtotal}
-    `;
-
-    document.getElementById("details").innerHTML = summary;
-    document.getElementById("summary").style.display = "block";
-}
+    
 function sendRequest() {
     const name = document.getElementById("guestName").value.trim();
     const email = document.getElementById("guestEmail").value.trim();
