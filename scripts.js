@@ -26,6 +26,10 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
         dateRangeInput.style.zIndex = "-1";
         document.body.appendChild(dateRangeInput);
     
+        // Track the current date range
+        let startDate = null;
+        let endDate = null;
+    
         // Initialize Flatpickr
         const flatpickrInstance = flatpickr(dateRangeInput, {
             mode: "range",
@@ -36,17 +40,32 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
                 if (rateMap[dateStr]) {
                     const priceTag = document.createElement("span");
                     priceTag.innerText = `$${rateMap[dateStr]}`;
-                    priceTag.style.fontSize = "9px";
-                    priceTag.style.lineHeight = "1";
+                    priceTag.style.fontSize = "10px";
+                    priceTag.style.lineHeight = "1.2";
                     priceTag.style.color = "#555";
                     priceTag.style.fontWeight = "500";
+                    priceTag.style.marginTop = "2px";
                     dayElem.appendChild(priceTag);
                 }
             },
             onChange: (selectedDates) => {
+                // If this is the first date selected, set the start date
+                if (selectedDates.length === 1) {
+                    startDate = selectedDates[0];
+                    endDate = null;
+                    console.log("🗓️ Start date selected:", startDate);
+                }
+    
+                // If this is the second date, set the end date and finalize the range
                 if (selectedDates.length === 2) {
-                    console.log("🗓️ Selected dates:", selectedDates);
+                    endDate = selectedDates[1];
+                    console.log("🗓️ End date selected:", endDate);
                     updateSummary(selectedDates);
+                }
+    
+                // Keep the start date if user switches months
+                if (startDate && !endDate) {
+                    dateRangeInput._flatpickr.setDate([startDate]);
                 }
             }
         });
@@ -57,9 +76,6 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
             console.log("🟢 Button clicked — opening calendar...");
             flatpickrInstance.open();
     
-            // Focus the input to ensure Flatpickr is active
-            dateRangeInput.focus();
-    
             // Fix the "tap out" issue
             setTimeout(() => {
                 dateRangeInput.style.opacity = "0";
@@ -67,6 +83,7 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
             }, 100);
         });
     }
+    
     
     
     
