@@ -15,7 +15,7 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
     .catch(error => {
         console.error("⚠️ Error fetching availability:", error);
     });
-    let promoCodes = {};
+    
 
     // Fetch Promo Codes
     fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getPromoCodes')
@@ -126,14 +126,22 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
             subtotal += rateMap[dateStr] || 0;
         }
     
-        // Apply promo code if present
-        const promoCode = document.getElementById("promo").value.trim().toUpperCase();
-        let discount = 0;
-    
-        if (promoCodes[promoCode]) {
-            const { amount, type } = promoCodes[promoCode];
-            discount = type === "%" ? subtotal * (amount / 100) : amount;
-        }
+// Check if promo codes are ready
+if (Object.keys(promoCodes).length === 0) {
+    console.warn("⚠️ Promo codes not loaded yet — retrying in 100ms");
+    setTimeout(() => updateSummary(dates), 100);
+    return;
+}
+
+// Apply promo code if present
+const promoCode = document.getElementById("promo").value.trim().toUpperCase();
+let discount = 0;
+
+if (promoCodes[promoCode]) {
+    const { amount, type } = promoCodes[promoCode];
+    discount = type === "%" ? subtotal * (amount / 100) : amount;
+}
+
     
         const total = subtotal + 200 - discount;
         const summary = `
