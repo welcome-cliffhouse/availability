@@ -53,6 +53,52 @@
     transform: translateX(-50%) scale(0.97);
   }
 
+    /* Center and Resize Calendar */
+    .flatpickr-calendar {
+        padding: 20px;
+        width: 90vw !important;
+        max-width: 420px;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        border-radius: 14px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        box-sizing: border-box;
+    }
+
+    /* Make the days easier to tap */
+    .flatpickr-day {
+        font-size: 18px !important;
+        line-height: 2 !important;
+        padding: 14px 0 !important;
+    }
+
+    /* Improve visibility of the current month/year */
+    .flatpickr-current-month {
+        font-size: 20px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Keep the nav arrows large enough for mobile */
+    .flatpickr-months .flatpickr-prev-month,
+    .flatpickr-months .flatpickr-next-month {
+        font-size: 22px !important;
+        padding: 0 12px !important;
+    }
+
+    /* Space out the weekday labels */
+    .flatpickr-weekdays {
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        margin-bottom: 8px;
+    }
+
+    /* Soften the look of previous/next month days */
+    .flatpickr-day.prevMonthDay:not(.flatpickr-disabled),
+    .flatpickr-day.nextMonthDay:not(.flatpickr-disabled) {
+        color: #DDDDDD !important;
+        font-weight: 400 !important;
+    }
+
   #summary {
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
