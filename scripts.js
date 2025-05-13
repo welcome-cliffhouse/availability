@@ -171,6 +171,7 @@ function sendRequest() {
     
     if (!dateRangeInput || dateRangeInput.selectedDates.length !== 2) {
         alert("Please select your check-in and check-out dates.");
+        console.error("⚠️ Missing date range — cannot proceed.");
         return;
     }
 
@@ -180,8 +181,11 @@ function sendRequest() {
 
     if (!name || !email || !phone) {
         alert("Please fill in all fields before submitting.");
+        console.error("⚠️ Missing form fields — cannot proceed.");
         return;
     }
+
+    console.log("✅ Form Data Collected:", { name, email, phone, formattedStartDate, formattedEndDate, promo });
 
     const url = `https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec`;
     const params = new URLSearchParams({
@@ -201,11 +205,19 @@ function sendRequest() {
     .then(response => response.text())
     .then(data => {
         console.log("✅ Booking Request Sent:", data);
-        document.getElementById("summary").style.display = "none";
-        document.getElementById("confirmationMessage").style.display = "block";
+
+        if (data.includes("Booking Saved")) {
+            console.log("✅ Booking successfully saved in the Bookings sheet.");
+            document.getElementById("summary").style.display = "none";
+            document.getElementById("confirmationMessage").style.display = "block";
+        } else {
+            console.error("❌ Unexpected response from server:", data);
+            alert("There was an unexpected response from the server. Please try again.");
+        }
     })
     .catch(error => {
         console.error("❌ Error sending booking request:", error);
         alert("There was an error sending your booking request. Please try again.");
     });
 }
+
