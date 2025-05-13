@@ -150,6 +150,7 @@ function updateSummary(dates) {
         Suggested Contribution: $${subtotal.toFixed(2)}<br>
         Cleaning Share: $200<br>
         ${discount > 0 ? `Because we appreciate you: -$${discount.toFixed(2)}<br><br>` : ''}
+        <br>
         <strong>Suggested Total Contribution: $${total.toFixed(2)}</strong>
     `;
 
