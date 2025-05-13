@@ -44,7 +44,6 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
 
 
 
-
 function initCalendar() {
     // Create the hidden date range input
     const dateRangeInput = document.createElement("input");
@@ -158,4 +157,55 @@ function updateSummary(dates) {
     document.getElementById("promoContainer").style.display = "block";
     document.getElementById("summary").style.display = "block";
     document.getElementById("request").style.display = "block";
+}
+
+function sendRequest() {
+    console.log("📤 Sending booking request...");
+
+    // Collect form data
+    const name = document.getElementById("guestName").value.trim();
+    const email = document.getElementById("guestEmail").value.trim();
+    const phone = document.getElementById("guestPhone").value.trim();
+    const promo = document.getElementById("promo").value.trim().toUpperCase();
+    const dateRangeInput = document.getElementById("dateRange")._flatpickr;
+    
+    if (!dateRangeInput || dateRangeInput.selectedDates.length !== 2) {
+        alert("Please select your check-in and check-out dates.");
+        return;
+    }
+
+    const [startDate, endDate] = dateRangeInput.selectedDates;
+    const formattedStartDate = startDate.toISOString().split('T')[0];
+    const formattedEndDate = endDate.toISOString().split('T')[0];
+
+    if (!name || !email || !phone) {
+        alert("Please fill in all fields before submitting.");
+        return;
+    }
+
+    const url = `https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec`;
+    const params = new URLSearchParams({
+        name,
+        email,
+        phone,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        promo
+    });
+
+    // Send the booking request
+    fetch(`${url}?${params.toString()}`, {
+        method: "POST",
+        mode: "cors"
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("✅ Booking Request Sent:", data);
+        document.getElementById("summary").style.display = "none";
+        document.getElementById("confirmationMessage").style.display = "block";
+    })
+    .catch(error => {
+        console.error("❌ Error sending booking request:", error);
+        alert("There was an error sending your booking request. Please try again.");
+    });
 }
