@@ -168,6 +168,7 @@ function sendRequest() {
     const phone = document.getElementById("guestPhone").value.trim();
     const promo = document.getElementById("promo").value.trim().toUpperCase();
     const dateRangeInput = document.getElementById("dateRange")._flatpickr;
+    const submitButton = document.querySelector("#request button");
 
     // Validate email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -207,6 +208,10 @@ function sendRequest() {
         promo
     });
 
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.innerText = "Sending...";
+
     // Send the booking request
     fetch(`${url}?${params.toString()}`, {
         method: "POST",
@@ -228,7 +233,13 @@ function sendRequest() {
     .catch(err => {
         console.error("❌ Error sending booking request:", err);
         alert("There was an error sending your booking request. Please try again.");
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.innerText = "Send Request";
     });
 }
+
 
 
