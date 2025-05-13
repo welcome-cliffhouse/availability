@@ -215,9 +215,18 @@ function sendRequest() {
             alert("There was an unexpected response from the server. Please try again.");
         }
     })
-    .catch(error => {
-        console.error("❌ Error sending booking request:", error);
-        alert("There was an error sending your booking request. Please try again.");
-    });
+    catch (err) {
+        const errorTime = new Date();
+        const errorMsg = `🚨 doPost ERROR at ${errorTime}: ${err.toString()}`;
+      
+        logSheet.appendRow([errorTime, errorMsg]);
+      
+        if (e?.postData?.contents) {
+          logSheet.appendRow([errorTime, `⚠️ Payload at error:`, e.postData.contents]);
+        }
+      
+        return ContentService.createTextOutput('Error');
+      }
+      
 }
 
