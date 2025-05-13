@@ -18,24 +18,27 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
     });
     
 
-// Fetch Promo Codes
+// Fetch Promo Codes with Verbose Logging
 fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getPromoCodes')
     .then(response => response.json())
     .then(data => {
-        // Convert to a flat array for easier matching
+        console.log("✅ Raw Promo Codes Data:", data);
+        
         promoCodes = data.map(item => ({
-            code: item.code.trim().toUpperCase(),
-            amount: item.amount,
-            type: item.type,
+            code: item.code ? item.code.trim().toUpperCase() : "(MISSING CODE)",
+            amount: item.amount || "(MISSING AMOUNT)",
+            type: item.type || "(MISSING TYPE)",
             start: item.start ? new Date(item.start).getTime() : null,
             end: item.end ? new Date(item.end).getTime() : null
         }));
 
-        console.log("✅ Promo Codes Loaded:", promoCodes);
+        console.log("✅ Parsed Promo Codes:", promoCodes);
     })
     .catch(error => {
         console.error("⚠️ Error fetching promo codes:", error);
     });
+
+
 
 
 function initCalendar() {
