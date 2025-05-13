@@ -165,29 +165,19 @@ function sendRequest() {
     // Collect form data
     const name = document.getElementById("guestName").value.trim();
     const email = document.getElementById("guestEmail").value.trim();
-
-// ✅ Add Email Validation Here
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-if (!isValidEmail(email)) {
-    alert("Please enter a valid email address.");
-    console.error("⚠️ Invalid email address — cannot proceed.");
-    return;
-}
-
-if (!name || !email || !phone) {
-    alert("Please fill in all fields before submitting.");
-    console.error("⚠️ Missing form fields — cannot proceed.");
-    return;
-}
-
     const phone = document.getElementById("guestPhone").value.trim();
     const promo = document.getElementById("promo").value.trim().toUpperCase();
     const dateRangeInput = document.getElementById("dateRange")._flatpickr;
-    
+
+    // Validate email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        console.error("⚠️ Invalid email address:", email);
+        return;
+    }
+
+    // Validate dates
     if (!dateRangeInput || dateRangeInput.selectedDates.length !== 2) {
         alert("Please select your check-in and check-out dates.");
         console.error("⚠️ Missing date range — cannot proceed.");
@@ -198,6 +188,7 @@ if (!name || !email || !phone) {
     const formattedStartDate = startDate.toISOString().split('T')[0];
     const formattedEndDate = endDate.toISOString().split('T')[0];
 
+    // Validate other required fields
     if (!name || !email || !phone) {
         alert("Please fill in all fields before submitting.");
         console.error("⚠️ Missing form fields — cannot proceed.");
@@ -239,4 +230,5 @@ if (!name || !email || !phone) {
         alert("There was an error sending your booking request. Please try again.");
     });
 }
+
 
