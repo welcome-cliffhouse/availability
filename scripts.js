@@ -146,13 +146,13 @@ function updateSummary(dates) {
     <h2>Visit Details</h2>
 
     <div class="visit-details">
-        <div class="visit-label">ARRIVE:</div>
+        <div class="visit-label">Arrive</div>
         <div class="visit-date">${checkIn}</div>
         
-        <div class="visit-label">DEPART:</div>
+        <div class="visit-label">Depart</div>
         <div class="visit-date">${checkOut}</div>
         
-        <div class="visit-label">TOTAL NIGHTS:</div>
+        <div class="visit-label">Total Nights</div>
         <div class="visit-date">${nights}</div>
     </div>
 
