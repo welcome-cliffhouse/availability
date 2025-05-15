@@ -143,10 +143,16 @@ function updateSummary(dates) {
 
     const total = subtotal + 200 - discount;
     const summary = `
-    <h3>Visit Details</h3>
-    Arrive: ${checkIn}<br>
-    Depart: ${checkOut}<br>
-    Total Nights: ${nights}<br><br>
+    <strong>Arrive:</strong>
+    <span class="date">${checkIn}</span>
+
+    <strong>Depart:</strong>
+    <span class="date">${checkOut}</span>
+
+    <strong>Total Nights:</strong>
+    <span class="date">${nights}</span>
+`;
+
     Suggested Contribution: $${subtotal.toFixed(2)}<br>
     Cleaning Share: $200<br>
     ${discount > 0 ? `Because we appreciate you: -$${discount.toFixed(2)}<br>` : ''}
