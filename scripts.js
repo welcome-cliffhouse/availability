@@ -161,7 +161,7 @@ function updateSummary(dates) {
         <br>
         <strong>Suggested Total Contribution: $${total.toFixed(2)}</strong>
     </div>
-    `;
+
 
 
     Suggested Contribution: $${subtotal.toFixed(2)}<br>
