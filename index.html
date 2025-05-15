@@ -216,28 +216,39 @@
 .price-breakdown {
     border-top: 2px solid #ccc;
     padding-top: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    color: #555;
+}
+.price-breakdown .price-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: 400;
 }
 
-.price-breakdown p {
-    margin: 10px 0;
-    font-family: 'Nunito', sans-serif;
-    font-size: 18px;
-}
-
-.price-breakdown .original {
-    text-decoration: line-through;
-    color: #888;
-    margin-right: 8px;
-    font-weight: 600;
-}
-
-.price-breakdown .total {
+.price-breakdown .price-line.total {
     font-weight: 700;
-    font-size: 20px;
-    color: #444;
-    margin-top: 16px;
-    display: block;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
 }
+
+.price-breakdown .price-label {
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.price-breakdown .price-amount {
+    font-weight: 400;
+}
+
+
+
+
+
 
 
 #summary h2 {

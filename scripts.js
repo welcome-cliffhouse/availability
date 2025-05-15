@@ -169,6 +169,7 @@ function updateSummary(dates) {
     document.getElementById("promoContainer").style.display = "block";
     document.getElementById("summary").style.display = "block";
     document.getElementById("request").style.display = "block";
+}
 
 function sendRequest() {
     console.log("📤 Sending booking request...");
