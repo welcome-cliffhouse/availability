@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   
-  <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Lato:wght@400&display=swap" rel="stylesheet">
+  <!-- Optimized Font Import (Include Arapey, Lato, Aboreto) -->
+<link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Lato:wght@400&family=Arapey:ital@1&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -468,6 +470,54 @@
     }
 }
 
+/* Arapey Italic (Thank You) */
+.thank-you-heading {
+    font-family: 'Arapey', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: #000;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* Lato Regular (Request Text) */
+.request-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* Aboreto (SENT) */
+.sent-heading {
+    font-family: 'Aboreto', cursive;
+    font-size: 48px;
+    color: #222;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* Lato Regular (Membership Text) */
+.membership-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+/* Lato Regular (ALL CAPS Small Spacing) */
+.spam-folder-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
 
   </style>
 </head>
@@ -529,11 +579,13 @@
 </div>
 
 <div id="confirmationMessage">
-  <h1 id="confirmationText" class="typewriter">Request sent! I’ll be in touch soon 🌿</h1>
-  <p style="font-size: 14px; color: #e0e0e0; margin-top: 12px;">
-    (please check your spam folder)
-  </p>
+    <h1 class="thank-you-heading">Thank You</h1>
+    <div class="request-text">Your request has been</div>
+    <h2 class="sent-heading">SENT</h2>
+    <div class="membership-text">once your membership has been verified, you will receive an email for confirmation within 24 hours</div>
+    <div class="spam-folder-text">Please check your spam folder</div>
 </div>
+
 
 </body>
 </html>
