@@ -151,7 +151,7 @@ function updateSummary(dates) {
 
     <strong>Total Nights:</strong>
     <span class="date">${nights}</span>
-`;
+    <br><br>
 
     Suggested Contribution: $${subtotal.toFixed(2)}<br>
     Cleaning Share: $200<br>
