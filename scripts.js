@@ -214,6 +214,7 @@ function sendRequest() {
     submitButton.innerText = "Sending...";
 
     // Send the booking request
+    console.log("🚀 Sending booking request with these params:", params.toString());
     fetch(`${url}?${params.toString()}`, {
         method: "POST",
         mode: "cors"
