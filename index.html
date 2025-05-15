@@ -169,15 +169,16 @@
 .visit-label {
     font-family: 'Lato', sans-serif;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.5px;
     margin-bottom: 5px;
     color: #333;
+    text-transform: none; /* Remove caps */
 }
 
 .visit-date {
     font-family: 'Lato', sans-serif;
-    font-weight: 400;
+    font-weight: 700;
+    text-transform: uppercase; /* Add caps */
     margin-bottom: 15px;
     color: #555;
 }
@@ -237,12 +238,14 @@
 }
 
 .price-breakdown .price-label {
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: none; /* Remove caps */
 }
 
 .price-breakdown .price-amount {
-    font-weight: 400;
+    font-weight: 700;
+    text-transform: uppercase; /* Add caps */
 }
 
 
