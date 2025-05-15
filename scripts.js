@@ -58,26 +58,55 @@ function initCalendar() {
     let startDate = null;
     let endDate = null;
 
-    // Initialize Flatpickr
-    const flatpickrInstance = flatpickr(dateRangeInput, {
-        mode: "range",
-        dateFormat: "Y-m-d",
-        enable: availableDates.map(d => d.date),
-        defaultDate: new Date(),
-        onDayCreate: function(dObj, dStr, fp, dayElem) {
-            const dateStr = dayElem.dateObj.toISOString().split('T')[0];
-            if (rateMap[dateStr]) {
-                const priceTag = document.createElement("span");
-                priceTag.innerText = `$${rateMap[dateStr]}`;
-                dayElem.appendChild(priceTag);
-            }
-        },
-        onChange: (selectedDates) => {
-            if (selectedDates.length === 2) {
-                updateSummary(selectedDates);
-            }
+   // Initialize Flatpickr with 2-night minimum and blocked date validation
+const flatpickrInstance = flatpickr(dateRangeInput, {
+    mode: "range",
+    dateFormat: "Y-m-d",
+    enable: availableDates.map(d => d.date),
+    defaultDate: new Date(),
+    onDayCreate: function(dObj, dStr, fp, dayElem) {
+        const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+        if (rateMap[dateStr]) {
+            const priceTag = document.createElement("span");
+            priceTag.innerText = `$${rateMap[dateStr]}`;
+            dayElem.appendChild(priceTag);
         }
-    });
+    },
+    onChange: (selectedDates) => {
+        if (selectedDates.length === 2) {
+            const [start, end] = selectedDates;
+            const totalNights = (end - start) / (1000 * 60 * 60 * 24);
+
+            // **2-Night Minimum Check**
+            if (totalNights < 2) {
+                alert("Your stay must be at least 2 nights. Please select a longer range.");
+                flatpickrInstance.clear();
+                return;
+            }
+
+            // **Blocked Date Validation**
+            const allDates = [];
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                const dateStr = d.toISOString().split('T')[0];
+                allDates.push(dateStr);
+            }
+
+            // Check if the selected range crosses any blocked dates
+            const blockedDates = availableDates.map(d => d.date);
+            const isBlocked = allDates.some(date => !blockedDates.includes(date));
+
+            if (isBlocked) {
+                alert("Your selected range includes one or more unavailable dates. Please choose a different range.");
+                flatpickrInstance.clear();
+                return;
+            }
+
+            // **Valid Range Update**
+            updateSummary(selectedDates);
+        }
+    }
+});
+
 
     // Attach promo code logic
     document.getElementById("promo").addEventListener("input", () => {
@@ -163,7 +192,7 @@ function updateSummary(dates) {
         <hr>
         
         <div class="final-total-heading">Total Suggested Contribution</div>
-        
+
         <div class="price-line total">
             ${discount > 0 ? `
                 <div class="original-total">$${(subtotal + 200).toFixed(2)}</div>
