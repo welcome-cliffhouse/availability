@@ -161,7 +161,15 @@ function updateSummary(dates) {
         <div class="price-line"><span class="price-label">Cleaning Share:</span> <span class="price-amount">$200</span></div>
         ${discount > 0 ? `<div class="price-line"><span class="price-label">Because we appreciate you:</span> <span class="price-amount">-$${discount.toFixed(2)}</span></div>` : ''}
         <hr>
-        <div class="price-line total"><span class="price-label">Suggested Total Contribution:</span> <span class="price-amount">$${total.toFixed(2)}</span></div>
+        <div class="price-line total">
+            ${discount > 0 ? `
+                <div class="original-total">$${(subtotal + 200).toFixed(2)}</div>
+                <div class="final-total">$${total.toFixed(2)}</div>
+            ` : `
+                <div class="final-total">$${total.toFixed(2)}</div>
+            `}
+        </div>
+
     </div>
 `;
 
