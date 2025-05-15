@@ -250,6 +250,33 @@
 
 
 
+/* Fine print styles */
+.fine-print {
+    font-size: 9px;
+    color: gray;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Keep it small on larger screens */
+@media (min-width: 768px) {
+    .fine-print {
+        font-size: 8px; /* Slightly smaller on desktop */
+        margin-top: 15px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+}
+
+@media (min-width: 1024px) {
+    .fine-print {
+        font-size: 7px; /* Extra small for large desktops */
+        max-width: 70%;
+        margin: 10px auto;
+        line-height: 1.3;
+    }
+}
 
 
 
@@ -258,7 +285,7 @@
     font-family: 'Aboreto', cursive;
     font-size: 32px;
     font-weight: 400;
-    text-align: left;
+    text-align: center;
     margin-bottom: 20px;
     color: #222;
 }
@@ -458,7 +485,7 @@
 <button id="availabilityButton">Browse Availability</button>
 
 <div id="summary" style="display: none;">
-    <div style="font-size: 9px; color: gray; text-align: center; margin-top: 10px; margin-bottom: 20px;">
+    <div class="fine-print">
         This is not a rental, but a private friends & family home. Any contributions help offset upkeep and cleaning costs so we can continue sharing this special place with our circle who we love so much!
     </div>
   
@@ -479,9 +506,9 @@
       <label>Your Email:<br><input id="guestEmail" type="email" required></label>
       <label>Your Phone Number:<br><input id="guestPhone" type="text" required></label>
       <button onclick="sendRequest()">Send Request</button>
-      <footer style="font-size: 9px; color: gray; text-align: center; margin-top: 20px;">
+      <footer class="fine-print">
         Private use only — by invitation of friends & family. Contributions are not payments for lodging, but help cover cleaning and upkeep costs of this shared home.
-      </footer>
+    </footer>
     </div>
 </div>
 
