@@ -2,6 +2,47 @@ console.log("🚀 Testing Vercel Deployment - Should see this if updated");
 
 console.log("✅ scripts.js loaded successfully");
 let promoCodes = [];
+console.log("🚀 Testing Vercel Deployment - Should see this if updated");
+
+console.log("✅ scripts.js loaded successfully");
+
+// Password Verification Logic
+function verifyPassword() {
+    const passwordInput = document.getElementById("passwordInput");
+    const errorMessage = document.getElementById("errorMessage");
+    const enteredPassword = passwordInput.value.trim();
+
+    // Use the existing VIPs check via Apps Script
+    const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
+    const params = new URLSearchParams({
+        mode: "password",
+        password: enteredPassword
+    });
+
+    fetch(`${url}?${params.toString()}`)
+        .then(response => response.text())
+        .then(data => {
+            console.log("🔒 Password Check Response:", data);
+            if (data === "success") {
+                document.getElementById("passwordOverlay").style.display = "none";
+                console.log("✅ Password accepted");
+            } else {
+                errorMessage.style.display = "block";
+                passwordInput.value = "";
+                console.log("❌ Incorrect password entered");
+            }
+        })
+        .catch(err => {
+            console.error("❌ Error verifying password:", err);
+            errorMessage.style.display = "block";
+            passwordInput.value = "";
+        });
+}
+
+// Hide the error message on focus
+document.getElementById("passwordInput").addEventListener("focus", () => {
+    document.getElementById("errorMessage").style.display = "none";
+});
 
 fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getAvailability')
     .then(response => response.json())
