@@ -125,26 +125,16 @@ function initCalendar() {
 
 // Open the calendar when the button is clicked
 const availabilityButton = document.getElementById("availabilityButton");
-availabilityButton.addEventListener("click", (e) => {
+availabilityButton.addEventListener("click", (event) => {
     console.log("🟢 Button clicked — opening calendar...");
-    e.preventDefault();  // Prevent any weird default behaviors
 
-    // Ensure the input is focusable before opening
-    dateRangeInput.style.opacity = "1";
-    dateRangeInput.style.pointerEvents = "auto";
+    // Prevent default focus loss behavior
+    event.preventDefault();
     
-    // Focus and open in the next frame to avoid focus loss
-    setTimeout(() => {
-        dateRangeInput.focus();
-        flatpickrInstance.open();
-        
-        // Hide the input again after a short delay
-        setTimeout(() => {
-            dateRangeInput.style.opacity = "0";
-            dateRangeInput.style.pointerEvents = "none";
-        }, 100);
-    }, 0);
+    // Open the calendar directly
+    flatpickrInstance.open();
 });
+
 
 
 }
