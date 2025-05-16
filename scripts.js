@@ -42,6 +42,35 @@ function verifyPassword() {
 
 // Ensure the DOM is fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
+    
+    console.log("🟢 DOM fully loaded, attaching event listeners...");
+
+    const availabilityButton = document.getElementById("availabilityButton");
+    const dateRangeInput = document.getElementById("dateRange");
+
+    if (!availabilityButton) {
+        console.error("❌ Availability button not found in DOM");
+        return;
+    }
+
+    // Button click logic
+    availabilityButton.addEventListener("click", (event) => {
+        console.log("🟢 Button clicked — opening calendar...");
+        event.preventDefault();
+        dateRangeInput.style.display = "block"; // Make it visible for focus
+        dateRangeInput.focus();
+        dateRangeInput._flatpickr.open();
+        setTimeout(() => {
+            dateRangeInput.style.display = "none"; // Hide it again
+        }, 200);
+    });
+
+    // Fix for reliable focus on the hidden date input
+    availabilityButton.addEventListener("mousedown", (event) => {
+        console.log("🟢 Button held down — focusing dateRange...");
+        dateRangeInput.focus();  // Force focus to the hidden input
+    });
+    
     const passwordInput = document.getElementById("passwordInput");
     if (passwordInput) {
         passwordInput.addEventListener("keypress", (e) => {
@@ -59,10 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-
-// Get the availability button once
-const availabilityButton = document.getElementById("availabilityButton");
 
 
 fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getAvailability')
@@ -177,12 +202,6 @@ function initCalendar() {
     }
 });
 
-// Fix for reliable focus on the hidden date input
-availabilityButton.addEventListener("mousedown", (event) => {
-    console.log("🟢 Button held down — focusing dateRange...");
-    const dateRangeInput = document.getElementById("dateRange");
-    dateRangeInput.focus();  // Force focus to the hidden input
-});
 
 
 
