@@ -14,6 +14,66 @@
   <script src="scripts.js?v=1"></script>
 
   <style>
+    /* Fullscreen password overlay */
+#passwordOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Password box styling */
+#passwordBox {
+    background-color: white;
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+#passwordBox input {
+    width: 200px;
+    padding: 10px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Submit button styling */
+#passwordBox button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#passwordBox button:hover {
+    background-color: #0056b3;
+}
+
+#passwordBox button:active {
+    background-color: #003d80;
+}
+
+/* Error message styling */
+#errorMessage {
+    color: red;
+    margin-top: 8px;
+    display: none;
+}
+
   body {
     background: url('/assets/IMG_2083.jpg') no-repeat center center fixed;
     background-size: cover;
@@ -528,8 +588,10 @@
 <div id="passwordOverlay"> 
   <div id="passwordBox">
     <p>Do you know the secret password?</p>
-    <input type="text" id="passwordInput" placeholder="Enter password" inputmode="numeric" autocomplete="off" style="-webkit-text-security: disc;" />
-    <button onclick="verifyPassword()">Submit</button>
+    <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" />
+
+    <button type="button" onclick="verifyPassword()">Submit</button>
+
     <p id="errorMessage" style="color: red; display: none;">Incorrect password. Please try again.</p>
   </div>
 </div>
