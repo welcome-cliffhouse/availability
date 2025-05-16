@@ -12,11 +12,11 @@ function verifyPassword() {
     const errorMessage = document.getElementById("errorMessage");
     const enteredPassword = passwordInput.value.trim();
 
-    // Use the existing VIPs check via Apps Script
     const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
     const params = new URLSearchParams({
         mode: "password",
-        password: enteredPassword
+        password: enteredPassword,
+        origin: window.location.origin
     });
 
     fetch(`${url}?${params.toString()}`, {
@@ -25,14 +25,11 @@ function verifyPassword() {
     })
     .then(response => response.text())
     .then(data => {
-        console.log("🔒 Password Check Response:", data);
         if (data === "success") {
             document.getElementById("passwordOverlay").style.display = "none";
-            console.log("✅ Password accepted");
         } else {
             errorMessage.style.display = "block";
             passwordInput.value = "";
-            console.log("❌ Incorrect password entered");
         }
     })
     .catch(err => {
@@ -41,6 +38,7 @@ function verifyPassword() {
         passwordInput.value = "";
     });
 }
+
 
 // Ensure the DOM is fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
