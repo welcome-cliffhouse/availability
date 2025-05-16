@@ -125,10 +125,14 @@ function initCalendar() {
 
 // Open the calendar when the button is clicked
 const availabilityButton = document.getElementById("availabilityButton");
-availabilityButton.addEventListener("click", () => {
+
+// Remove any previous event listeners to avoid duplicates
+availabilityButton.replaceWith(availabilityButton.cloneNode(true));
+
+// Re-attach the event listener to the new button node
+document.getElementById("availabilityButton").addEventListener("click", () => {
     console.log("🟢 Button clicked — opening calendar...");
     
-    // Open the calendar directly
     const dateRangeInput = document.getElementById("dateRange");
     dateRangeInput.style.opacity = "1";
     dateRangeInput.style.pointerEvents = "auto";
@@ -143,6 +147,7 @@ availabilityButton.addEventListener("click", () => {
         dateRangeInput.style.pointerEvents = "none";
     }, 200);
 });
+
 
 
 
