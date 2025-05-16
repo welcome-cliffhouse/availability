@@ -18,11 +18,11 @@ async function verifyVIPPhone(phone) {
     }
 }
 
-// Login notification function
+// Send login notification
 function sendLoginNotification(phone) {
     const url = 'https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec';
     const params = new URLSearchParams({
-        mode: 'password',
+        action: 'sendLoginNotification',
         phone: phone
     });
 
@@ -42,14 +42,13 @@ function sendLoginNotification(phone) {
     });
 }
 
-// Main middleware function
+// Middleware function
 export default function middleware(req, res, next) {
     const authHeader = req.headers.authorization || '';
     const base64Credentials = authHeader.split(' ')[1] || '';
-    const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+    const credentials = new TextDecoder().decode(Uint8Array.from(atob(base64Credentials), c => c.charCodeAt(0)));
     const [phone, password] = credentials.split(':');
 
-    // Check if the phone number is in the allowed list
     verifyVIPPhone(phone).then(isVIP => {
         if (isVIP) {
             console.log(`✅ Access granted for phone: ${phone}`);
@@ -60,5 +59,8 @@ export default function middleware(req, res, next) {
             res.setHeader('WWW-Authenticate', 'Basic realm="Cliff House"');
             res.status(401).send('🚫 Unauthorized - Please enter a valid phone number.');
         }
+    }).catch(error => {
+        console.error(`❌ Middleware error: ${error.message}`);
+        res.status(500).send('🚫 Internal Server Error');
     });
 }

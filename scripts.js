@@ -19,30 +19,53 @@ function verifyPassword() {
         password: enteredPassword
     });
 
-    fetch(`${url}?${params.toString()}`)
-        .then(response => response.text())
-        .then(data => {
-            console.log("🔒 Password Check Response:", data);
-            if (data === "success") {
-                document.getElementById("passwordOverlay").style.display = "none";
-                console.log("✅ Password accepted");
-            } else {
-                errorMessage.style.display = "block";
-                passwordInput.value = "";
-                console.log("❌ Incorrect password entered");
-            }
-        })
-        .catch(err => {
-            console.error("❌ Error verifying password:", err);
+    fetch(`${url}?${params.toString()}`, {
+        method: "GET",
+        mode: "cors"
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("🔒 Password Check Response:", data);
+        if (data === "success") {
+            document.getElementById("passwordOverlay").style.display = "none";
+            console.log("✅ Password accepted");
+        } else {
             errorMessage.style.display = "block";
             passwordInput.value = "";
-        });
+            console.log("❌ Incorrect password entered");
+        }
+    })
+    .catch(err => {
+        console.error("❌ Error verifying password:", err);
+        errorMessage.style.display = "block";
+        passwordInput.value = "";
+    });
 }
 
-// Hide the error message on focus
-document.getElementById("passwordInput").addEventListener("focus", () => {
-    document.getElementById("errorMessage").style.display = "none";
+// Ensure the DOM is fully loaded before attaching event listeners
+document.addEventListener("DOMContentLoaded", () => {
+    const passwordInput = document.getElementById("passwordInput");
+    if (passwordInput) {
+        passwordInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                verifyPassword();
+            }
+        });
+
+        // Hide the error message on focus
+        passwordInput.addEventListener("focus", () => {
+            document.getElementById("errorMessage").style.display = "none";
+        });
+    } else {
+        console.error("❌ Password input not found in DOM");
+    }
 });
+
+
+
+// Get the availability button once
+const availabilityButton = document.getElementById("availabilityButton");
+
 
 fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getAvailability')
     .then(response => response.json())
@@ -157,7 +180,6 @@ function initCalendar() {
 });
 
 // Fix for reliable focus on the hidden date input
-const availabilityButton = document.getElementById("availabilityButton");
 availabilityButton.addEventListener("mousedown", (event) => {
     console.log("🟢 Button held down — focusing dateRange...");
     const dateRangeInput = document.getElementById("dateRange");
@@ -174,7 +196,6 @@ availabilityButton.addEventListener("mousedown", (event) => {
     });
 
 // Open the calendar when the button is clicked
-const availabilityButton = document.getElementById("availabilityButton");
 availabilityButton.addEventListener("click", (event) => {
     console.log("🟢 Button clicked — opening calendar...");
 
