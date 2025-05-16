@@ -115,18 +115,26 @@ const flatpickrInstance = flatpickr(dateRangeInput, {
         }
     });
 
-    // Open the calendar when the button is clicked
-    const availabilityButton = document.getElementById("availabilityButton");
-    availabilityButton.addEventListener("click", () => {
-        console.log("🟢 Button clicked — opening calendar...");
-        flatpickrInstance.open();
+// Open the calendar when the button is clicked
+const availabilityButton = document.getElementById("availabilityButton");
+availabilityButton.addEventListener("click", () => {
+    console.log("🟢 Button clicked — opening calendar...");
 
-        // Fix the "tap out" issue
-        setTimeout(() => {
-            dateRangeInput.style.opacity = "0";
-            dateRangeInput.style.pointerEvents = "none";
-        }, 100);
-    });
+    // Force focus to the hidden input for reliable flatpickr opening
+    dateRangeInput.style.opacity = "1";
+    dateRangeInput.style.pointerEvents = "auto";
+    dateRangeInput.focus();
+
+    // Open the calendar immediately
+    flatpickrInstance.open();
+
+    // Immediately hide the input again to prevent accidental focus loss
+    setTimeout(() => {
+        dateRangeInput.style.opacity = "0";
+        dateRangeInput.style.pointerEvents = "none";
+    }, 200);
+});
+
 }
 
 
