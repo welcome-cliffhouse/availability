@@ -115,6 +115,15 @@ function initCalendar() {
     }
 });
 
+// Fix for reliable focus on the hidden date input
+const availabilityButton = document.getElementById("availabilityButton");
+availabilityButton.addEventListener("mousedown", (event) => {
+    console.log("🟢 Button held down — focusing dateRange...");
+    const dateRangeInput = document.getElementById("dateRange");
+    dateRangeInput.focus();  // Force focus to the hidden input
+});
+
+
 
     // Attach promo code logic
     document.getElementById("promo").addEventListener("input", () => {
@@ -125,20 +134,17 @@ function initCalendar() {
 
 // Open the calendar when the button is clicked
 const availabilityButton = document.getElementById("availabilityButton");
-
-// Remove any previous event listeners to avoid duplicates
-availabilityButton.replaceWith(availabilityButton.cloneNode(true));
-
-// Re-attach the event listener to the new button node
-document.getElementById("availabilityButton").addEventListener("click", () => {
+availabilityButton.addEventListener("click", (event) => {
     console.log("🟢 Button clicked — opening calendar...");
+
+    // Prevent default focus loss behavior
+    event.preventDefault();
     
+    // Open the calendar directly
     const dateRangeInput = document.getElementById("dateRange");
     dateRangeInput.style.opacity = "1";
     dateRangeInput.style.pointerEvents = "auto";
     dateRangeInput.focus();
-
-    // Open the calendar directly
     dateRangeInput._flatpickr.open();
 
     // Hide the input again after a slight delay
@@ -147,6 +153,7 @@ document.getElementById("availabilityButton").addEventListener("click", () => {
         dateRangeInput.style.pointerEvents = "none";
     }, 200);
 });
+
 
 
 
