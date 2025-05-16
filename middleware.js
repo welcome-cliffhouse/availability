@@ -9,6 +9,7 @@ async function verifyVIPPhone(phone) {
     }).toString();
 
     try {
+        console.log(`🔄 Fetching URL: ${url}?${params}`);
         const response = await fetch(`${url}?${params}`, {
             method: 'GET',
             mode: 'cors',  // ✅ Critical for cross-origin requests
@@ -18,6 +19,8 @@ async function verifyVIPPhone(phone) {
             }
         });
 
+        console.log(`📝 Response Status: ${response.status}`);
+        console.log(`📝 Response Headers:`, response.headers);
         const data = await response.text();
         console.log(`🔐 Password verification response: ${data}`);
         return data.trim() === 'success';
@@ -25,36 +28,6 @@ async function verifyVIPPhone(phone) {
         console.error(`❌ Failed to verify VIP phone: ${error.message}`);
         return false;
     }
-}
-
-// Send login notification
-function sendLoginNotification(phone) {
-    const url = 'https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec';
-    const params = new URLSearchParams({
-        action: 'sendLoginNotification',
-        phone: phone
-    }).toString();
-
-    fetch(`${url}?${params}`, {
-        method: 'POST',
-        mode: 'cors',  // ✅ Critical for cross-origin requests
-        headers: {
-            'Accept': 'text/plain',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log(`📩 Login notification response: ${data}`);
-        if (data.trim() === 'success') {
-            console.log(`✅ Login notification sent for phone: ${phone}`);
-        } else {
-            console.error(`❌ Unexpected response from server: ${data}`);
-        }
-    })
-    .catch(error => {
-        console.error(`❌ Failed to send login notification: ${error.message}`);
-    });
 }
 
 // Middleware function
@@ -65,10 +38,11 @@ export default function middleware(req, res, next) {
         const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
         const [phone, password] = credentials.split(':');
 
+        console.log(`🛂 Attempting to verify phone: ${phone}`);
+
         verifyVIPPhone(phone).then(isVIP => {
             if (isVIP) {
                 console.log(`✅ Access granted for phone: ${phone}`);
-                sendLoginNotification(phone);
                 next();
             } else {
                 console.log(`❌ Access denied for phone: ${phone}`);
