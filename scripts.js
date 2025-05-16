@@ -3,13 +3,15 @@ console.log("🚀 Testing Vercel Deployment - Should see this if updated");
 console.log("✅ scripts.js loaded successfully");
 let promoCodes = [];
 
-// Fetch available dates from Google Sheets
-let availableDates = [];
-let rateMap = {};
-
 fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getAvailability')
     .then(response => response.json())
     .then(data => {
+        if (!Array.isArray(data) || data.length === 0) {
+            console.warn("⚠️ No available dates received. Retrying in 100ms...");
+            setTimeout(() => location.reload(), 100);
+            return;
+        }
+        
         availableDates = data;
         rateMap = Object.fromEntries(data.map(d => [d.date, d.rate]));
         console.log("✅ Available Dates Loaded:", availableDates);
@@ -18,6 +20,7 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
     .catch(error => {
         console.error("⚠️ Error fetching availability:", error);
     });
+
     
 
 // Fetch Promo Codes (Updated Logic)
@@ -59,7 +62,12 @@ function initCalendar() {
     let endDate = null;
 
    // Initialize Flatpickr with 2-night minimum and blocked date validation
-const flatpickrInstance = flatpickr(dateRangeInput, {
+   if (dateRangeInput._flatpickr) {
+    console.log("🗑️ Clearing old Flatpickr instance...");
+    dateRangeInput._flatpickr.destroy();
+}
+
+   const flatpickrInstance = flatpickr(dateRangeInput, {
     mode: "range",
     dateFormat: "Y-m-d",
     enable: availableDates.map(d => d.date),
@@ -117,23 +125,27 @@ const flatpickrInstance = flatpickr(dateRangeInput, {
 
 // Open the calendar when the button is clicked
 const availabilityButton = document.getElementById("availabilityButton");
-availabilityButton.addEventListener("click", () => {
+availabilityButton.addEventListener("click", (e) => {
     console.log("🟢 Button clicked — opening calendar...");
+    e.preventDefault();  // Prevent any weird default behaviors
 
-    // Force focus to the hidden input for reliable flatpickr opening
+    // Ensure the input is focusable before opening
     dateRangeInput.style.opacity = "1";
     dateRangeInput.style.pointerEvents = "auto";
-    dateRangeInput.focus();
-
-    // Open the calendar immediately
-    flatpickrInstance.open();
-
-    // Immediately hide the input again to prevent accidental focus loss
+    
+    // Focus and open in the next frame to avoid focus loss
     setTimeout(() => {
-        dateRangeInput.style.opacity = "0";
-        dateRangeInput.style.pointerEvents = "none";
-    }, 200);
+        dateRangeInput.focus();
+        flatpickrInstance.open();
+        
+        // Hide the input again after a short delay
+        setTimeout(() => {
+            dateRangeInput.style.opacity = "0";
+            dateRangeInput.style.pointerEvents = "none";
+        }, 100);
+    }, 0);
 });
+
 
 }
 
