@@ -6,10 +6,10 @@ async function verifyVIPPhone(phone) {
     const params = new URLSearchParams({
         mode: 'password',
         password: phone
-    });
+    }).toString();
 
     try {
-        const response = await fetch(`${url}?${params.toString()}`, {
+        const response = await fetch(`${url}?${params}`, {
             method: 'GET',
             mode: 'cors',  // ✅ Critical for cross-origin requests
             headers: {
@@ -33,9 +33,9 @@ function sendLoginNotification(phone) {
     const params = new URLSearchParams({
         action: 'sendLoginNotification',
         phone: phone
-    });
+    }).toString();
 
-    fetch(`${url}?${params.toString()}`, {
+    fetch(`${url}?${params}`, {
         method: 'POST',
         mode: 'cors',  // ✅ Critical for cross-origin requests
         headers: {
