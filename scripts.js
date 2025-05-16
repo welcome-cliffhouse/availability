@@ -131,9 +131,22 @@ availabilityButton.addEventListener("click", (event) => {
     // Prevent default focus loss behavior
     event.preventDefault();
     
+    // Focus the hidden input to ensure reliable Flatpickr behavior
+    const dateRangeInput = document.getElementById("dateRange");
+    dateRangeInput.style.opacity = "1";
+    dateRangeInput.style.pointerEvents = "auto";
+    dateRangeInput.focus();
+
     // Open the calendar directly
     flatpickrInstance.open();
+
+    // Hide the input again after a slight delay
+    setTimeout(() => {
+        dateRangeInput.style.opacity = "0";
+        dateRangeInput.style.pointerEvents = "none";
+    }, 200);
 });
+
 
 
 
