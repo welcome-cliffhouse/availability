@@ -1,4 +1,4 @@
-console.log("🚀 Testing Vercel Deployment - Should see this if updated");
+console.log("🚀 Testing Vercel Deployment meow - Should see this if updated");
 
 console.log("✅ scripts.js loaded successfully");
 let promoCodes = [];
