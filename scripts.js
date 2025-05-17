@@ -1,7 +1,3 @@
-
-
-
-
 // Cliff House Booking System (Consolidated DOM Logic)
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -114,30 +110,21 @@ function verifyPassword(passwordInput, errorMessage) {
     });
 }
 
-// ✅ Summary and Date Logic (Restored)
-function updateSummary(dates) {
-    if (!dates || dates.length < 2) return;
-
-    const [start, end] = dates;
-    const checkIn = start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const checkOut = end.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const nights = (end - start) / (1000 * 60 * 60 * 24);
-
-    const summary = `
-    <h2>Visit Details</h2>
-    <div class="visit-details">
-        <div class="visit-label">Arrive:</div>
-        <div class="visit-date">${checkIn}</div>
-        <div class="visit-label">Depart:</div>
-        <div class="visit-date">${checkOut}</div>
-        <div class="visit-label">Total Nights:</div>
-        <div class="visit-date">${nights}</div>
-    </div>`;
-
-    document.getElementById("details").innerHTML = summary;
-    document.getElementById("summary").style.display = "block";
-    document.getElementById("request").style.display = "block";
+// ✅ Calendar Initialization Logic
+function initCalendar(dateRangeInput) {
+    flatpickr(dateRangeInput, {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        onChange: (selectedDates) => {
+            if (selectedDates.length === 2) {
+                updateSummary(selectedDates);
+            }
+        }
+    });
+    console.log("✅ Calendar initialized");
 }
+
 
 
 
