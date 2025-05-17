@@ -87,31 +87,43 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🟢 DOM fully loaded, attaching event listeners...");
 
+    const passwordOverlay = document.getElementById("passwordOverlay");
     const passwordInput = document.getElementById("passwordInput");
     const errorMessage = document.getElementById("errorMessage");
-    const passwordOverlay = document.getElementById("passwordOverlay");
 
-    if (passwordInput && errorMessage && passwordOverlay) {
-        
-        // Hide the error message on focus
+    // Make sure the overlay is visible on first load
+    if (passwordOverlay) {
+        passwordOverlay.style.display = "flex";
+    }
+
+    // Handle password entry
+    if (passwordInput && errorMessage) {
         passwordInput.addEventListener("focus", () => {
             errorMessage.style.display = "none";
         });
 
-        // Submit on Enter Key
         passwordInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
                 verifyPassword();
             }
         });
-
-        // Ensure the overlay is visible on first load
-        passwordOverlay.style.display = "flex";
-
     } else {
-        console.error("❌ Password input, error message, or overlay not found in DOM");
+        console.error("❌ Password input or error message not found in DOM");
+    }
+
+    // Calendar Logic
+    const dateRangeInput = document.getElementById("dateRange");
+    const availabilityButton = document.getElementById("availabilityButton");
+
+    if (availabilityButton && dateRangeInput) {
+        availabilityButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            dateRangeInput.focus();
+            dateRangeInput._flatpickr.open();
+        });
     }
 });
+
 
 
 
@@ -168,21 +180,7 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
 
 function initCalendar() {
     
-    /*
-    // Create the hidden date range input
-    const dateRangeInput = document.createElement("input");
-    dateRangeInput.id = "dateRange";
-    dateRangeInput.style.position = "absolute";
-    dateRangeInput.style.opacity = "0";
-    dateRangeInput.style.pointerEvents = "none";
-    dateRangeInput.style.zIndex = "-1";
-    document.body.appendChild(dateRangeInput);
-    */
-
-    // Use the existing dateRangeInput from the DOM
-    const dateRangeInput = document.getElementById("dateRange");
-
-
+    
     // Track the current date range
     let startDate = null;
     let endDate = null;
