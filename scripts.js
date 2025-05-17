@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordOverlay = document.getElementById("passwordOverlay");
     const passwordInput = document.getElementById("passwordInput");
     const errorMessage = document.getElementById("errorMessage");
-    let isSubmitting = false; // Prevent double submission
+    let isSubmitting = false;
 
     // Make sure the overlay is visible on first load
     if (passwordOverlay) {
@@ -107,38 +107,26 @@ document.addEventListener("DOMContentLoaded", () => {
         passwordInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter" && !isSubmitting) {
                 isSubmitting = true;
-                passwordInput.disabled = true;
-                
-                // Add a subtle visual effect on submission
-                passwordInput.style.opacity = "0.7";
-                passwordInput.style.transition = "opacity 0.3s ease";
-
-                // Simulate password check (replace this with your actual verification logic)
-                const password = passwordInput.value.trim();
-                
-                // Use your actual verification function here
-                verifyPassword(password)
+                console.log("🔒 Attempting password check...");
+                verifyPassword()
                     .then(success => {
                         if (success) {
-                            console.log("✅ Password correct");
-                            passwordOverlay.classList.add("fade-blur-out");
-                            setTimeout(() => {
-                                passwordOverlay.style.display = "none";
-                            }, 700);
+                            console.log("✅ Password verified");
                         } else {
                             console.log("❌ Password incorrect");
                             errorMessage.style.display = "block";
                             passwordInput.classList.add("shake");
+                            setTimeout(() => {
+                                passwordInput.classList.remove("shake");
+                                passwordInput.focus();  // Refocus for quick retry
+                                isSubmitting = false;
+                            }, 600);
                         }
                     })
                     .catch(err => {
-                        console.error("❌ Error during verification:", err);
+                        console.error("❌ Error verifying password:", err);
                         errorMessage.style.display = "block";
-                    })
-                    .finally(() => {
                         isSubmitting = false;
-                        passwordInput.disabled = false;
-                        passwordInput.style.opacity = "1";
                     });
             }
         });
@@ -159,27 +147,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ✅ Actual Password Verification Logic
-async function verifyPassword(enteredPassword) {
-    const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
-    const params = new URLSearchParams({
-        mode: "password",
-        password: enteredPassword,
-        origin: window.location.origin
-    });
+// ✅ Password Verification Logic
+async function verifyPassword() {
+    const passwordInput = document.getElementById("passwordInput");
+    const enteredPassword = passwordInput.value.trim();
+
+    console.log(`🔒 VIP password check attempt: ${enteredPassword}`);
 
     try {
-        const response = await fetch(`${url}?${params.toString()}`, {
-            method: "GET",
-            mode: "cors"
+        const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
+        const params = new URLSearchParams({
+            mode: "password",
+            password: enteredPassword,
+            origin: window.location.origin
         });
+
+        const response = await fetch(`${url}?${params.toString()}`);
         const data = await response.text();
-        return data === "success";
+
+        if (data.trim() === "success") {
+            console.log("✅ VIP password verified.");
+            document.getElementById("passwordOverlay").classList.add("fade-blur-out");
+            setTimeout(() => {
+                document.getElementById("passwordOverlay").style.display = "none";
+            }, 700);
+            return true;
+        } else {
+            console.log("❌ VIP password failed.");
+            return false;
+        }
     } catch (err) {
-        console.error("❌ Error verifying password:", err);
+        console.error("❌ Error during VIP password verification:", err);
         return false;
     }
 }
+
 
 
     // Calendar Logic
