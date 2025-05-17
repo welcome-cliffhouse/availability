@@ -12,7 +12,12 @@ function verifyPassword() {
     const errorMessage = document.getElementById("errorMessage");
     const enteredPassword = passwordInput.value.trim();
 
-    if (enteredPassword === "") return;  // Prevent empty input from triggering error
+    // Prevent empty submission
+    if (enteredPassword === "") return;
+
+    // Disable input to prevent double submission
+    passwordInput.disabled = true;
+    passwordInput.classList.add("loading");
 
     const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
     const params = new URLSearchParams({
@@ -28,19 +33,25 @@ function verifyPassword() {
     .then(response => response.text())
     .then(data => {
         if (data === "success") {
+            console.log("🔓 Password accepted, overlay hidden");
             document.getElementById("passwordOverlay").style.display = "none";
         } else {
+            console.warn("❌ Incorrect password attempt");
             errorMessage.style.display = "block";
             passwordInput.value = "";
+            passwordInput.disabled = false;  // Re-enable after failure
+            passwordInput.classList.remove("loading");
         }
     })
     .catch(err => {
         console.error("❌ Error verifying password:", err);
         errorMessage.style.display = "block";
         passwordInput.value = "";
+        passwordInput.disabled = false;  // Re-enable after network error
+        passwordInput.classList.remove("loading");
     });
-
 }
+
 
 
 
@@ -147,40 +158,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ✅ Password Verification Logic
-async function verifyPassword() {
+// ✅ Unified Password Logic (Consolidated)
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("🟢 DOM fully loaded, attaching event listeners...");
+
+    const passwordOverlay = document.getElementById("passwordOverlay");
     const passwordInput = document.getElementById("passwordInput");
-    const enteredPassword = passwordInput.value.trim();
+    const errorMessage = document.getElementById("errorMessage");
 
-    console.log(`🔒 VIP password check attempt: ${enteredPassword}`);
+    // Make sure the overlay is visible on first load
+    if (passwordOverlay) {
+        passwordOverlay.style.display = "flex";
+    }
 
-    try {
-        const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
-        const params = new URLSearchParams({
-            mode: "password",
-            password: enteredPassword,
-            origin: window.location.origin
+    // Handle password entry
+    if (passwordInput && errorMessage) {
+        passwordInput.addEventListener("focus", () => {
+            errorMessage.style.display = "none";
         });
 
-        const response = await fetch(`${url}?${params.toString()}`);
-        const data = await response.text();
-
-        if (data.trim() === "success") {
-            console.log("✅ VIP password verified.");
-            document.getElementById("passwordOverlay").classList.add("fade-blur-out");
-            setTimeout(() => {
-                document.getElementById("passwordOverlay").style.display = "none";
-            }, 700);
-            return true;
-        } else {
-            console.log("❌ VIP password failed.");
-            return false;
-        }
-    } catch (err) {
-        console.error("❌ Error during VIP password verification:", err);
-        return false;
+        passwordInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" && !passwordInput.disabled) {
+                verifyPassword(passwordInput, errorMessage);
+            }
+        });
+    } else {
+        console.error("❌ Password input or error message not found in DOM");
     }
-}
 
 
 
