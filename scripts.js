@@ -113,7 +113,7 @@ function verifyPassword(passwordInput, errorMessage) {
         mode: "password",
         password: enteredPassword,
         origin: window.location.origin
-    });Calendar Initialization Logic
+    });
 
     passwordInput.disabled = true;
     passwordInput.classList.add("loading");
