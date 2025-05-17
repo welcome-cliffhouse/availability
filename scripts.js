@@ -90,19 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordOverlay = document.getElementById("passwordOverlay");
     const passwordInput = document.getElementById("passwordInput");
     const errorMessage = document.getElementById("errorMessage");
-
-    // Make sure the overlay is visible on first load
-    if (passwordOverlay) {
-        passwordOverlay.style.display = "flex";
-    }
-
-   // ✅ Handle Password Logic
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("🟢 DOM fully loaded, attaching event listeners...");
-
-    const passwordOverlay = document.getElementById("passwordOverlay");
-    const passwordInput = document.getElementById("passwordInput");
-    const errorMessage = document.getElementById("errorMessage");
     let isSubmitting = false; // Prevent double submission
 
     // Make sure the overlay is visible on first load
@@ -114,47 +101,86 @@ document.addEventListener("DOMContentLoaded", () => {
     if (passwordInput && errorMessage) {
         passwordInput.addEventListener("focus", () => {
             errorMessage.style.display = "none";
+            passwordInput.classList.remove("shake");
         });
 
         passwordInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter" && !isSubmitting) {
                 isSubmitting = true;
+                passwordInput.disabled = true;
                 
                 // Add a subtle visual effect on submission
                 passwordInput.style.opacity = "0.7";
                 passwordInput.style.transition = "opacity 0.3s ease";
-                passwordInput.disabled = true;
 
                 // Simulate password check (replace this with your actual verification logic)
                 const password = passwordInput.value.trim();
-                const correctPassword = "your-password"; // Replace with actual logic
-
-                if (password === correctPassword) {
-                    console.log("✅ Password correct");
-                    passwordInput.style.opacity = "1"; // Reset opacity on success
-                    document.getElementById("passwordOverlay").classList.add("fade-blur-out");
-                    setTimeout(() => {
-                        document.getElementById("passwordOverlay").style.display = "none";
+                
+                // Use your actual verification function here
+                verifyPassword(password)
+                    .then(success => {
+                        if (success) {
+                            console.log("✅ Password correct");
+                            passwordOverlay.classList.add("fade-blur-out");
+                            setTimeout(() => {
+                                passwordOverlay.style.display = "none";
+                            }, 700);
+                        } else {
+                            console.log("❌ Password incorrect");
+                            errorMessage.style.display = "block";
+                            passwordInput.classList.add("shake");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("❌ Error during verification:", err);
+                        errorMessage.style.display = "block";
+                    })
+                    .finally(() => {
                         isSubmitting = false;
-                    }, 700);
-                } else {
-                    console.log("❌ Password incorrect");
-                    errorMessage.style.display = "block";
-                    passwordInput.classList.add("shake");
-                    
-                    // Reset after shake animation
-                    setTimeout(() => {
-                        passwordInput.classList.remove("shake");
                         passwordInput.disabled = false;
                         passwordInput.style.opacity = "1";
-                        isSubmitting = false;
-                    }, 700);
-                }
+                    });
             }
         });
     } else {
         console.error("❌ Password input or error message not found in DOM");
     }
+
+    // Calendar Logic
+    const dateRangeInput = document.getElementById("dateRange");
+    const availabilityButton = document.getElementById("availabilityButton");
+
+    if (availabilityButton && dateRangeInput) {
+        availabilityButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            dateRangeInput.focus();
+            dateRangeInput._flatpickr.open();
+        });
+    }
+});
+
+// ✅ Actual Password Verification Logic
+async function verifyPassword(enteredPassword) {
+    const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
+    const params = new URLSearchParams({
+        mode: "password",
+        password: enteredPassword,
+        origin: window.location.origin
+    });
+
+    try {
+        const response = await fetch(`${url}?${params.toString()}`, {
+            method: "GET",
+            mode: "cors"
+        });
+        const data = await response.text();
+        return data === "success";
+    } catch (err) {
+        console.error("❌ Error verifying password:", err);
+        return false;
+    }
+}
+
 
     // Calendar Logic
     const dateRangeInput = document.getElementById("dateRange");
