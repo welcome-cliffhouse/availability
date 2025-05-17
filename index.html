@@ -27,9 +27,9 @@
     z-index: 999;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 20px;
+    padding: 60px 20px;
 }
 
 /* Mobile Background */
@@ -50,24 +50,26 @@
 #passwordOverlay h1 {
     font-family: 'Aboreto', sans-serif;
     font-size: 48px;
+    line-height: 1.1;
     color: #fcf3ca;
-    margin-bottom: 20px;
     text-align: center;
+    margin-bottom: 40vh;  /* Push the text up */
+    letter-spacing: 2px;
 }
 
 /* Password Input */
 #passwordBox input {
     background-color: #fcf3ca;
     border-radius: 25px;
-    padding: 16px 24px;
+    padding: 12px 20px;
     font-size: 20px;
     font-family: 'Arapey', serif;
     font-style: italic;
     color: #555;
     text-align: center;
     border: none;
-    width: 240px;
-    margin-top: 20px;
+    width: 220px;
+    margin-top: -20vh;
 }
 
 /* Remove Border on Focus */
@@ -86,6 +88,17 @@
     text-align: center;
 }
 
+/* Center the Title on Mobile */
+@media (max-width: 768px) {
+    #passwordOverlay h1 {
+        margin-bottom: 45vh;
+        font-size: 42px;
+    }
+
+    #passwordBox input {
+        width: 200px;
+        font-size: 18px;
+    }
 
   body {
     background: url('/assets/IMG_2083.jpg') no-repeat center center fixed;
@@ -599,12 +612,14 @@
 
 
     <div id="passwordOverlay">
-        <h1>PRIVATE CLUB</h1>
+        <h1>PRIVATE<br>CLUB</h1>
         <div id="passwordBox">
             <input type="password" id="passwordInput" placeholder="What's the password?" autocomplete="off" />
             <p id="errorMessage">Incorrect password. Please try again.</p>
         </div>
     </div>
+    
+    
     
       
 
