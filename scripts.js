@@ -1,4 +1,102 @@
-console.log("🚀 Testing Vercel Deployment meow - Should see this if updated");
+// Cliff House Booking System (Consolidated DOM Logic)
+
+// ✅ Ensure DOM is fully loaded before attaching event listeners
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("🟢 DOM fully loaded, attaching event listeners...");
+
+    // ✅ Password Logic
+    const passwordOverlay = document.getElementById("passwordOverlay");
+    const passwordInput = document.getElementById("passwordInput");
+    const errorMessage = document.getElementById("errorMessage");
+
+    if (passwordOverlay) {
+        passwordOverlay.style.display = "flex";
+    }
+
+    if (passwordInput && errorMessage) {
+        passwordInput.addEventListener("focus", () => {
+            errorMessage.style.display = "none";
+            passwordInput.classList.remove("shake");
+        });
+
+        passwordInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" && !passwordInput.disabled) {
+                console.log("🔒 Attempting password check...");
+                verifyPassword(passwordInput, errorMessage);
+            }
+        });
+    } else {
+        console.error("❌ Password input or error message not found in DOM");
+    }
+
+    // ✅ Calendar Logic
+    let dateRangeInput = document.getElementById("dateRange");
+    if (!dateRangeInput) {
+        dateRangeInput = document.createElement("input");
+        dateRangeInput.id = "dateRange";
+        dateRangeInput.style.position = "absolute";
+        dateRangeInput.style.opacity = "0";
+        dateRangeInput.style.pointerEvents = "none";
+        dateRangeInput.style.zIndex = "-1";
+        document.body.appendChild(dateRangeInput);
+    }
+
+    const availabilityButton = document.getElementById("availabilityButton");
+    if (availabilityButton && dateRangeInput) {
+        availabilityButton.addEventListener("click", (event) => {
+            console.log("🟢 Button clicked — opening calendar...");
+            event.preventDefault();
+            dateRangeInput.focus();
+            dateRangeInput._flatpickr.open();
+        });
+    } else {
+        console.error("❌ Availability button or date input not found in DOM");
+    }
+});
+
+// ✅ Password Verification Logic
+function verifyPassword(passwordInput, errorMessage) {
+    const enteredPassword = passwordInput.value.trim();
+
+    if (enteredPassword === "") return;  // Prevent empty submission
+
+    const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
+    const params = new URLSearchParams({
+        mode: "password",
+        password: enteredPassword,
+        origin: window.location.origin
+    });
+
+    // Disable input to prevent double submission
+    passwordInput.disabled = true;
+    passwordInput.classList.add("loading");
+
+    fetch(`${url}?${params.toString()}`, {
+        method: "GET",
+        mode: "cors"
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data === "success") {
+            console.log("🔓 Password accepted, overlay hidden");
+            document.getElementById("passwordOverlay").style.display = "none";
+        } else {
+            console.warn("❌ Incorrect password attempt");
+            errorMessage.style.display = "block";
+            passwordInput.value = "";
+            passwordInput.disabled = false;
+            passwordInput.classList.remove("loading");
+        }
+    })
+    .catch(err => {
+        console.error("❌ Error verifying password:", err);
+        errorMessage.style.display = "block";
+        passwordInput.value = "";
+        passwordInput.disabled = false;
+        passwordInput.classList.remove("loading");
+    });
+}
+/*console.log("🚀 Testing Vercel Deployment meow - Should see this if updated");
 
 console.log("✅ scripts.js loaded successfully");
 let promoCodes = [];
@@ -537,3 +635,4 @@ function sendRequest() {
 
 
 
+*/
