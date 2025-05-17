@@ -81,7 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     const passwordInput = document.getElementById("passwordInput");
+    
     if (passwordInput) {
+        // Submit on Enter Key
         passwordInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
                 verifyPassword();
