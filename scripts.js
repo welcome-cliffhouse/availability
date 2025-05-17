@@ -12,6 +12,8 @@ function verifyPassword() {
     const errorMessage = document.getElementById("errorMessage");
     const enteredPassword = passwordInput.value.trim();
 
+    if (enteredPassword === "") return;  // Prevent empty input from triggering error
+
     const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
     const params = new URLSearchParams({
         mode: "password",
@@ -37,7 +39,13 @@ function verifyPassword() {
         errorMessage.style.display = "block";
         passwordInput.value = "";
     });
+
 }
+
+// Hide the error message on focus
+document.getElementById("passwordInput").addEventListener("focus", () => {
+    document.getElementById("errorMessage").style.display = "none";
+});
 
 
 // Ensure the DOM is fully loaded before attaching event listeners
