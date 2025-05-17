@@ -1,6 +1,9 @@
+
+
+
+
 // Cliff House Booking System (Consolidated DOM Logic)
 
-// ✅ Ensure DOM is fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🟢 DOM fully loaded, attaching event listeners...");
 
@@ -46,11 +49,25 @@ document.addEventListener("DOMContentLoaded", () => {
         availabilityButton.addEventListener("click", (event) => {
             console.log("🟢 Button clicked — opening calendar...");
             event.preventDefault();
-            dateRangeInput.focus();
-            dateRangeInput._flatpickr.open();
+            if (dateRangeInput._flatpickr) {
+                dateRangeInput._flatpickr.open();
+            } else {
+                initCalendar(dateRangeInput);
+            }
         });
     } else {
         console.error("❌ Availability button or date input not found in DOM");
+    }
+
+    // ✅ Promo Code Logic
+    const promoInput = document.getElementById("promo");
+    if (promoInput) {
+        promoInput.addEventListener("input", () => {
+            const flatpickrInstance = dateRangeInput._flatpickr;
+            if (flatpickrInstance && flatpickrInstance.selectedDates.length === 2) {
+                updateSummary(flatpickrInstance.selectedDates);
+            }
+        });
     }
 });
 
@@ -96,6 +113,41 @@ function verifyPassword(passwordInput, errorMessage) {
         passwordInput.classList.remove("loading");
     });
 }
+
+// ✅ Summary and Date Logic (Restored)
+function updateSummary(dates) {
+    if (!dates || dates.length < 2) return;
+
+    const [start, end] = dates;
+    const checkIn = start.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const checkOut = end.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const nights = (end - start) / (1000 * 60 * 60 * 24);
+
+    const summary = `
+    <h2>Visit Details</h2>
+    <div class="visit-details">
+        <div class="visit-label">Arrive:</div>
+        <div class="visit-date">${checkIn}</div>
+        <div class="visit-label">Depart:</div>
+        <div class="visit-date">${checkOut}</div>
+        <div class="visit-label">Total Nights:</div>
+        <div class="visit-date">${nights}</div>
+    </div>`;
+
+    document.getElementById("details").innerHTML = summary;
+    document.getElementById("summary").style.display = "block";
+    document.getElementById("request").style.display = "block";
+}
+
+
+
+
+
+
+
+
+
+/* CODE THAT HAD ALL MY FUNCTIONS 
 /*console.log("🚀 Testing Vercel Deployment meow - Should see this if updated");
 
 console.log("✅ scripts.js loaded successfully");
