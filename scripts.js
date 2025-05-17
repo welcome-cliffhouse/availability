@@ -96,6 +96,20 @@ document.addEventListener("DOMContentLoaded", () => {
         passwordOverlay.style.display = "flex";
     }
 
+   // ✅ Handle Password Logic
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("🟢 DOM fully loaded, attaching event listeners...");
+
+    const passwordOverlay = document.getElementById("passwordOverlay");
+    const passwordInput = document.getElementById("passwordInput");
+    const errorMessage = document.getElementById("errorMessage");
+    let isSubmitting = false; // Prevent double submission
+
+    // Make sure the overlay is visible on first load
+    if (passwordOverlay) {
+        passwordOverlay.style.display = "flex";
+    }
+
     // Handle password entry
     if (passwordInput && errorMessage) {
         passwordInput.addEventListener("focus", () => {
@@ -103,13 +117,58 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         passwordInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                verifyPassword();
+            if (e.key === "Enter" && !isSubmitting) {
+                isSubmitting = true;
+                
+                // Add a subtle visual effect on submission
+                passwordInput.style.opacity = "0.7";
+                passwordInput.style.transition = "opacity 0.3s ease";
+                passwordInput.disabled = true;
+
+                // Simulate password check (replace this with your actual verification logic)
+                const password = passwordInput.value.trim();
+                const correctPassword = "your-password"; // Replace with actual logic
+
+                if (password === correctPassword) {
+                    console.log("✅ Password correct");
+                    passwordInput.style.opacity = "1"; // Reset opacity on success
+                    document.getElementById("passwordOverlay").classList.add("fade-blur-out");
+                    setTimeout(() => {
+                        document.getElementById("passwordOverlay").style.display = "none";
+                        isSubmitting = false;
+                    }, 700);
+                } else {
+                    console.log("❌ Password incorrect");
+                    errorMessage.style.display = "block";
+                    passwordInput.classList.add("shake");
+                    
+                    // Reset after shake animation
+                    setTimeout(() => {
+                        passwordInput.classList.remove("shake");
+                        passwordInput.disabled = false;
+                        passwordInput.style.opacity = "1";
+                        isSubmitting = false;
+                    }, 700);
+                }
             }
         });
     } else {
         console.error("❌ Password input or error message not found in DOM");
     }
+
+    // Calendar Logic
+    const dateRangeInput = document.getElementById("dateRange");
+    const availabilityButton = document.getElementById("availabilityButton");
+
+    if (availabilityButton && dateRangeInput) {
+        availabilityButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            dateRangeInput.focus();
+            dateRangeInput._flatpickr.open();
+        });
+    }
+});
+
 
     // Calendar Logic
     const dateRangeInput = document.getElementById("dateRange");
