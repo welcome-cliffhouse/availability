@@ -65,6 +65,41 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // ✅ Fetch Available Dates and Initialize Calendar
+    fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getAvailability')
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data) || data.length === 0) {
+                console.warn("⚠️ No available dates received. Retrying in 100ms...");
+                setTimeout(() => location.reload(), 100);
+                return;
+            }
+            window.availableDates = data;
+            window.rateMap = Object.fromEntries(data.map(d => [d.date, d.rate]));
+            console.log("✅ Available Dates Loaded:", availableDates);
+            initCalendar(dateRangeInput);
+        })
+        .catch(error => {
+            console.error("⚠️ Error fetching availability:", error);
+        });
+
+    // ✅ Fetch Promo Codes
+    fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?action=getPromoCodes')
+        .then(response => response.json())
+        .then(data => {
+            window.promoCodes = data.map(row => ({
+                code: String(row.code || "").trim().toUpperCase(),
+                amount: Number(row.amount) || 0,
+                type: String(row.type || "").trim(),
+                start: row.start ? new Date(row.start).getTime() : null,
+                end: row.end ? new Date(row.end).getTime() : null,
+            }));
+            console.log("✅ Parsed Promo Codes:", promoCodes);
+        })
+        .catch(error => {
+            console.error("⚠️ Error fetching promo codes:", error);
+        });
 });
 
 // ✅ Password Verification Logic
@@ -78,9 +113,8 @@ function verifyPassword(passwordInput, errorMessage) {
         mode: "password",
         password: enteredPassword,
         origin: window.location.origin
-    });
+    });Calendar Initialization Logic
 
-    // Disable input to prevent double submission
     passwordInput.disabled = true;
     passwordInput.classList.add("loading");
 
@@ -116,6 +150,7 @@ function initCalendar(dateRangeInput) {
         mode: "range",
         dateFormat: "Y-m-d",
         minDate: "today",
+        enable: availableDates.map(d => d.date),
         onChange: (selectedDates) => {
             if (selectedDates.length === 2) {
                 updateSummary(selectedDates);
@@ -124,6 +159,25 @@ function initCalendar(dateRangeInput) {
     });
     console.log("✅ Calendar initialized");
 }
+
+// ✅ Summary Update Logic
+function updateSummary(dates) {
+    if (!dates || dates.length < 2) return;
+
+    console.log("🔄 Updating summary for dates:", dates);
+
+    const [start, end] = dates;
+    const nights = (end - start) / (1000 * 60 * 60 * 24);
+
+    let totalCost = 200;  // Default cleaning fee
+    for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split('T')[0];
+        totalCost += rateMap[dateStr] || 0;
+    }
+
+    console.log("💰 Calculated total:", totalCost);
+}
+
 
 
 
