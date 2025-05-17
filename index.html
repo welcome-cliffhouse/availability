@@ -14,7 +14,8 @@
   <script src="scripts.js?v=1"></script>
 
   <style>
-/* Password Overlay Background */
+
+/* Password Overlay */
 #passwordOverlay {
     position: fixed;
     top: 0;
@@ -22,24 +23,22 @@
     right: 0;
     bottom: 0;
     background-size: cover;
-    background-position: center center;
+    background-position: center;
     background-repeat: no-repeat;
-    z-index: 999;
+    background-attachment: fixed;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding: 60px 20px;
+    background-color: rgba(0, 0, 0, 0.8);  /* Slight tint for security */
+    overflow: hidden;
 }
 
 /* Mobile Background */
 @media (max-width: 768px) {
     #passwordOverlay {
         background-image: url('./assets/password page girl with binoculars mobile.jpg');
-    }
-    #passwordBox input {
-        width: 220px;
-        margin-top: 5px;  /* Reduce this further on mobile */
     }
 }
 
@@ -50,76 +49,98 @@
     }
 }
 
-/* Private Club Title */
-#passwordOverlay h1 {
-    font-family: 'Aboreto', sans-serif;
-    font-size: 48px;
-    line-height: 1.1;
-    color: #fcf3ca;
-    text-align: center;
-    margin-bottom: 20px;  /* Push the text up */
-    letter-spacing: 2px;
-}
-
-/* Password Box Styling */
-#passwordBox {
+/* Password Container */
+#passwordContainer {
+    width: 100vw;
+    height: 50vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    border: 2px solid #b66328;
     background-color: transparent;
-    border-radius: 20px;
-    padding: 10px;
-    margin-top: 20px;
+    padding: 20px;
+    
+}
+
+/* Title */
+#passwordContainer h1 {
+    font-family: 'Aboreto', sans-serif;
+    font-size: 48px;
+    color: #fcf3ca;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    border: 2px solid #b66328;
 }
 
 /* Password Input */
-#passwordBox input {
-    width: 260px;
-    padding: 10px;
-    margin-bottom: 12px;
-    margin-top: 10px;  /* Reduce this to tighten the spacing */
+#passwordContainer input {
+    width: auto;
+    max-width: 240px;
+    padding: 10px 15px;
     font-size: 18px;
     border-radius: 20px;
-    border: none;
-    background-color: #FCF3CA;
+    color: #fcf3ca;
     font-family: 'Arapey', serif;
     font-style: italic;
-    color: #555;
     text-align: center;
-    transition: background-color 0.3s;
+    background-color: #fcf3ca;
+    transition: border-color 0.3s;
+    margin-bottom: 15px;
+    line-height: 1.2;
 }
 
 /* Placeholder Text */
-#passwordBox input::placeholder {
+#passwordContainer input::placeholder {
     color: #000;
     font-style: italic;
-    font-size: 22px;
+    font-size: 18px;
+}
+
+/* Hover Effect */
+#passwordContainer input:hover {
+    border-color: #ffe599;
+    box-shadow: 0 0 8px rgba(252, 243, 202, 0.6);
 }
 
 /* Remove Border on Focus */
-#passwordBox input:focus {
+#passwordContainer input:focus {
     outline: none;
+    border-color: #ffe599;
+    box-shadow: 0 0 12px rgba(252, 243, 202, 0.8);
 }
 
 /* Error Message */
 #errorMessage {
     color: #ff6b6b;
     margin-top: 10px;
-    display: none;
     font-family: 'Arapey', serif;
     font-style: italic;
     font-size: 16px;
     text-align: center;
+    display: none;
 }
 
-/* Center the Title on Mobile */
-@media (max-width: 768px) {
-    #passwordOverlay h1 {
-        margin-bottom: 45vh;
-        font-size: 42px;
-    }
+/* Shake Animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+}
 
-    
+/* Trigger the shake */
+.shake {
+    animation: shake 0.6s ease;
+}
+/* Disable Scrolling */
+body.no-scroll {
+    overflow: hidden;
+}
+/* Block Page Inspection (Prevents quick peek at hidden content) */
+body.locked * {
+    pointer-events: none;
+}
 
   body {
     background: url('/assets/IMG_2083.jpg') no-repeat center center fixed;
@@ -448,7 +469,7 @@
 }
 
 
-  }
+  
   /* Scrollbar styling to match the calendar */
   #summary::-webkit-scrollbar {
     width: 8px;
@@ -633,14 +654,12 @@
 
 
     <div id="passwordOverlay">
-    <h1>PRIVATE<br>CLUB</h1>
-    <div id="passwordBox">
-        <input type="password" id="passwordInput" placeholder="What's the password?" autocomplete="off" />
-        <p id="errorMessage">Incorrect password. Please try again.</p>
+        <div id="passwordContainer">
+            <h1>PRIVATE<br>CLUB</h1>
+            <input type="password" id="passwordInput" placeholder="What's the password?" autocomplete="off" />
+            <p id="errorMessage">Password not found</p>
+        </div>
     </div>
-</div>
-
-    
     
     
       
