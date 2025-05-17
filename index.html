@@ -29,10 +29,11 @@
     z-index: 9999;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.8);  /* Slight tint for security */
     overflow: hidden;
+    border: 2px solid #43a047;
+    padding-top: 0;  /* Reset padding */
 }
 
 /* Mobile Background */
@@ -55,12 +56,12 @@
     height: 50vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /*align at top*/
     align-items: center;
-    border: 2px solid #b66328;
+    border: 2px solid #ffe599;
     background-color: transparent;
     padding: 20px;
-    position: relative;  /* Make sure it's not affected by other positioning */
+    /*position: relative;  Make sure it's not affected by other positioning */
     z-index: 9999;  /* Bring it to the front */
     
     
