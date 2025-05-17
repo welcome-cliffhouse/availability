@@ -14,14 +14,17 @@
   <script src="scripts.js?v=1"></script>
 
   <style>
-    /* Fullscreen password overlay */
+/* Password Overlay Background */
 #passwordOverlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -29,13 +32,27 @@
     align-items: center;
 }
 
-/* Password box styling */
+/* Mobile Background */
+@media (max-width: 768px) {
+    #passwordOverlay {
+        background-image: url('./assets/password page girl with binoculars mobile.jpg');
+    }
+}
+
+/* Desktop Background */
+@media (min-width: 769px) {
+    #passwordOverlay {
+        background-image: url('./assets/password page girl with binoculars desktop.jpg');
+    }
+}
+
+/* Password Box Styling */
 #passwordBox {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 14px;
-    padding: 24px;
+    padding: 24px 40px;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 
 #passwordBox input {
@@ -48,31 +65,43 @@
     text-align: center;
 }
 
-/* Submit button styling */
+/* Button Styling */
 #passwordBox button {
-    background-color: #007BFF;
-    color: white;
+    background-color: #F8E08A;
+    color: #444;
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
+    font-weight: bold;
+    font-family: 'Arapey', serif;
     transition: background-color 0.3s;
 }
 
 #passwordBox button:hover {
-    background-color: #0056b3;
+    background-color: #e8d067;
 }
 
 #passwordBox button:active {
-    background-color: #003d80;
+    background-color: #d8c057;
 }
 
-/* Error message styling */
+/* Error Message */
 #errorMessage {
     color: red;
     margin-top: 8px;
     display: none;
+    font-family: 'Arapey', serif;
 }
+
+/* Text Styling */
+#passwordBox p {
+    font-family: 'Arapey', serif;
+    font-size: 28px;
+    color: #F8E08A;
+    margin-bottom: 20px;
+}
+
 
   body {
     background: url('/assets/IMG_2083.jpg') no-repeat center center fixed;
@@ -585,16 +614,15 @@
 <body>
 
 
-<div id="passwordOverlay"> 
-  <div id="passwordBox">
-    <p>Do you know the secret password?</p>
-    <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" />
-
-    <button type="button" onclick="verifyPassword()">Submit</button>
-
-    <p id="errorMessage" style="color: red; display: none;">Incorrect password. Please try again.</p>
-  </div>
-</div>
+    <div id="passwordOverlay"> 
+        <div id="passwordBox">
+          <p>What's the Password?</p>
+          <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off" />
+          <button type="button" onclick="verifyPassword()">Submit</button>
+          <p id="errorMessage">Incorrect password. Please try again.</p>
+        </div>
+      </div>
+      
 
 
 <button id="availabilityButton">Browse Availability</button>
@@ -649,6 +677,8 @@
 </div>
 
 
+<input type="text" id="dateRange" style="display: none;" />
 
 </body>
+
 </html>
