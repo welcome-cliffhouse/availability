@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         console.error("❌ Availability button not found in DOM");
     }
-}
+});
 
 // ✅ Handle Password Logic
 document.addEventListener("DOMContentLoaded", () => {
