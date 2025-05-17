@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         console.error("❌ Availability button not found in DOM");
     }
+}
 
 // ✅ Handle Password Logic
 document.addEventListener("DOMContentLoaded", () => {
@@ -114,11 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // Fix for reliable focus on the hidden date input
-    availabilityButton.addEventListener("mousedown", (event) => {
-        console.log("🟢 Button held down — focusing dateRange...");
-        dateRangeInput.focus();  // Force focus to the hidden input
-    });
+    
     
     
 
