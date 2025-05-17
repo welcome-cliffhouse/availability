@@ -42,12 +42,21 @@ function verifyPassword() {
 
 // Ensure the DOM is fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
-    
     console.log("🟢 DOM fully loaded, attaching event listeners...");
 
-    const availabilityButton = document.getElementById("availabilityButton");
-    const dateRangeInput = document.getElementById("dateRange");
+    // ✅ Create the dateRange input if it doesn't exist
+    let dateRangeInput = document.getElementById("dateRange");
+    if (!dateRangeInput) {
+        dateRangeInput = document.createElement("input");
+        dateRangeInput.id = "dateRange";
+        dateRangeInput.style.position = "absolute";
+        dateRangeInput.style.opacity = "0";
+        dateRangeInput.style.pointerEvents = "none";
+        dateRangeInput.style.zIndex = "-1";
+        document.body.appendChild(dateRangeInput);
+    }
 
+    const availabilityButton = document.getElementById("availabilityButton");
     if (!availabilityButton) {
         console.error("❌ Availability button not found in DOM");
         return;
@@ -87,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("❌ Password input not found in DOM");
     }
 });
+
 
 
 
@@ -135,6 +145,8 @@ fetch('https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpme
 
 
 function initCalendar() {
+    
+    /*
     // Create the hidden date range input
     const dateRangeInput = document.createElement("input");
     dateRangeInput.id = "dateRange";
@@ -143,6 +155,11 @@ function initCalendar() {
     dateRangeInput.style.pointerEvents = "none";
     dateRangeInput.style.zIndex = "-1";
     document.body.appendChild(dateRangeInput);
+    */
+
+    // Use the existing dateRangeInput from the DOM
+    const dateRangeInput = document.getElementById("dateRange");
+
 
     // Track the current date range
     let startDate = null;
