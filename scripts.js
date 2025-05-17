@@ -42,17 +42,13 @@ function verifyPassword() {
 
 }
 
-// Hide the error message on focus
-document.getElementById("passwordInput").addEventListener("focus", () => {
-    document.getElementById("errorMessage").style.display = "none";
-});
 
 
 // Ensure the DOM is fully loaded before attaching event listeners
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🟢 DOM fully loaded, attaching event listeners...");
 
-    // ✅ Create the dateRange input if it doesn't exist
+    // ✅ Handle Date Range Input
     let dateRangeInput = document.getElementById("dateRange");
     if (!dateRangeInput) {
         dateRangeInput = document.createElement("input");
@@ -65,22 +61,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const availabilityButton = document.getElementById("availabilityButton");
-    if (!availabilityButton) {
+    if (availabilityButton) {
+        availabilityButton.addEventListener("click", (event) => {
+            console.log("🟢 Button clicked — opening calendar...");
+            event.preventDefault();
+            dateRangeInput.style.display = "block"; // Make it visible for focus
+            dateRangeInput.focus();
+            dateRangeInput._flatpickr.open();
+            setTimeout(() => {
+                dateRangeInput.style.display = "none"; // Hide it again
+            }, 200);
+        });
+
+        // Fix for reliable focus on the hidden date input
+        availabilityButton.addEventListener("mousedown", (event) => {
+            console.log("🟢 Button held down — focusing dateRange...");
+            dateRangeInput.focus();  // Force focus to the hidden input
+        });
+    } else {
         console.error("❌ Availability button not found in DOM");
-        return;
     }
 
-    // Button click logic
-    availabilityButton.addEventListener("click", (event) => {
-        console.log("🟢 Button clicked — opening calendar...");
-        event.preventDefault();
-        dateRangeInput.style.display = "block"; // Make it visible for focus
-        dateRangeInput.focus();
-        dateRangeInput._flatpickr.open();
-        setTimeout(() => {
-            dateRangeInput.style.display = "none"; // Hide it again
-        }, 200);
-    });
+    // ✅ Handle Password Logic
+    const passwordInput = document.getElementById("passwordInput");
+    const errorMessage = document.getElementById("errorMessage");
+    const passwordOverlay = document.getElementById("passwordOverlay");
+    
+    if (passwordInput && errorMessage && passwordOverlay) {
+        
+        // Hide the error message on focus
+        passwordInput.addEventListener("focus", () => {
+            errorMessage.style.display = "none";
+        });
+
+        // Submit on Enter Key
+        passwordInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                verifyPassword();
+            }
+        });
+
+        // Ensure the overlay is visible on first load
+        passwordOverlay.style.display = "flex";
+
+    } else {
+        console.error("❌ Password input, error message, or overlay not found in DOM");
+    }
+});
+
 
     // Fix for reliable focus on the hidden date input
     availabilityButton.addEventListener("mousedown", (event) => {
