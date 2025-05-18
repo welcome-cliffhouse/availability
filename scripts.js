@@ -151,6 +151,17 @@ function initCalendar(dateRangeInput) {
         dateFormat: "Y-m-d",
         minDate: "today",
         enable: availableDates.map(d => d.date),
+        
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+            const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+            if (rateMap[dateStr]) {
+                const priceTag = document.createElement("span");
+                priceTag.innerText = `$${rateMap[dateStr].toFixed(0)}`;
+                priceTag.classList.add("price-tag");
+                dayElem.appendChild(priceTag);
+            }
+        },
+        
         onChange: (selectedDates) => {
             if (selectedDates.length === 2) {
                 updateSummary(selectedDates);
