@@ -1,5 +1,7 @@
 // Cliff House Booking System (Consolidated DOM Logic)
 
+let passwordSubmitted = false;
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🟢 DOM fully loaded, attaching event listeners...");
 
@@ -24,6 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
         passwordInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter" && !passwordInput.disabled && !passwordSubmitted) {
                 passwordSubmitted = true;
+                
+                setTimeout(() => {
+                    if (passwordSubmitted) {
+                        console.warn("⏱️ Resetting passwordSubmitted after 10s timeout.");
+                        passwordSubmitted = false;
+                    }
+                }, 10000);
+                
                 console.log("🔒 Attempting password check...");
                 verifyPassword(passwordInput, errorMessage);
             }
