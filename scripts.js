@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.warn("⛔ Enter ignored due to disabled or already submitted");
             }
         });
-
+    }
 
 // ✅ Defensively hide confirmation message in case it's lingering from a previous state
 const confirmationBox = document.getElementById("confirmationMessage");
