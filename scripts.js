@@ -18,8 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordInput.classList.remove("shake");
         });
 
+        let passwordSubmitted = false;
+
+        
         passwordInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter" && !passwordInput.disabled) {
+            if (e.key === "Enter" && !passwordInput.disabled && !passwordSubmitted) {
+                passwordSubmitted = true;
                 console.log("🔒 Attempting password check...");
                 verifyPassword(passwordInput, errorMessage);
             }
@@ -109,6 +113,11 @@ if (confirmationBox) confirmationBox.style.display = "none";
 function verifyPassword(passwordInput, errorMessage) {
     const enteredPassword = passwordInput.value.trim();
 
+    if (enteredPassword === "") {
+        console.warn("⛔ Empty password field — skipping fetch");
+        return;
+    }
+    
     if (enteredPassword === "") return;  // Prevent empty submission
 
     const url = "https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec";
@@ -136,6 +145,7 @@ function verifyPassword(passwordInput, errorMessage) {
             passwordInput.value = "";
             passwordInput.disabled = false;
             passwordInput.classList.remove("loading");
+            passwordSubmitted = false; // 🔁 Re-enable if failed
         }
     })
     .catch(err => {
@@ -144,6 +154,7 @@ function verifyPassword(passwordInput, errorMessage) {
         passwordInput.value = "";
         passwordInput.disabled = false;
         passwordInput.classList.remove("loading");
+        passwordSubmitted = false; // 🔁 Re-enable if failed
     });
 }
 
