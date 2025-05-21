@@ -122,9 +122,12 @@ if (confirmationBox) confirmationBox.style.display = "none";
         })
         .catch(error => {
             console.error("⚠️ Error fetching promo codes:", error);
+        
         });
 
 
+    
+     
 // ✅ Password Verification Logic
 function verifyPassword(passwordInput, errorMessage) {
     console.log("📞 verifyPassword() called with value:", passwordInput.value);
