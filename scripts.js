@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordInput.classList.remove("shake");
         });
 
-        let passwordSubmitted = false;
 
         
         passwordInput.addEventListener("keypress", (e) => {
