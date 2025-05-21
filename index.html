@@ -695,7 +695,7 @@ body.locked * {
     margin-bottom: 16px;
 }
  /* Mobile override */
- @media (max-width: 768px) {
+@media (max-width: 768px) {
   body {
     background: url('./assets/Orca View Mobile-80.jpg') no-repeat center center fixed;
     background-size: cover;
@@ -709,7 +709,7 @@ body.locked * {
     <div id="passwordOverlay">
         <div id="passwordContainer">
             <h1>PRIVATE<br>CLUB</h1>
-            <input type="password" id="passwordInput" placeholder="What's the password?" autocomplete="off" />
+            <input type="tel" id="passwordInput" inputmode="numeric" pattern="[0-9]*" placeholder="What's the password?" autocomplete="off" />
             <p id="errorMessage">Password not found</p>
         </div>
     </div>
