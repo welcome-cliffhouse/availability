@@ -23,8 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         
         passwordInput.addEventListener("keypress", (e) => {
+            console.log("⌨️ Keypress:", e.key);
+            console.log("🧪 passwordInput.disabled?", passwordInput.disabled);
+            console.log("🧪 passwordSubmitted?", passwordSubmitted);
+
             if (e.key === "Enter" && !passwordInput.disabled && !passwordSubmitted) {
                 passwordSubmitted = true;
+                console.log("🔒 Attempting password check...");
                 
                 setTimeout(() => {
                     if (passwordSubmitted) {
@@ -33,13 +38,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }, 10000);
                 
-                console.log("🔒 Attempting password check...");
+                
                 verifyPassword(passwordInput, errorMessage);
+            } else if (e.key === "Enter") {
+                console.warn("⛔ Enter ignored due to disabled or already submitted");
             }
         });
-    } else {
-        console.error("❌ Password input or error message not found in DOM");
-    }
+
+        
 // ✅ Defensively hide confirmation message in case it's lingering from a previous state
 const confirmationBox = document.getElementById("confirmationMessage");
 if (confirmationBox) confirmationBox.style.display = "none";
@@ -120,6 +126,8 @@ if (confirmationBox) confirmationBox.style.display = "none";
 
 // ✅ Password Verification Logic
 function verifyPassword(passwordInput, errorMessage) {
+    console.log("📞 verifyPassword() called with value:", passwordInput.value);
+
     const enteredPassword = passwordInput.value.trim();
 
     if (enteredPassword === "") {
