@@ -168,7 +168,7 @@ body.locked * {
 }
 
   body {
-    background: url('/assets/IMG_2083.jpg') no-repeat center center fixed;
+    background: url('./assets/Orca View Desktop-80.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     margin: 0;
@@ -177,6 +177,13 @@ body.locked * {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  /* Mobile override */
+@media (max-width: 768px) {
+  body {
+    background: url('./assets/Orca View Mobile-80.jpg') no-repeat center center fixed;
+    background-size: cover;
   }
 
   #availabilityButton {
