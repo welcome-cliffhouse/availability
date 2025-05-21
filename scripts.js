@@ -318,7 +318,7 @@ function sendRequest() {
         if (data.includes("Booking Saved")) {
             console.log("✅ Booking successfully saved in the Bookings sheet.");
             document.getElementById("summary").style.display = "none";
-            document.getElementById("confirmationMessage").style.display = "block";
+            document.getElementById("confirmationMessage").style.display = "none";
         } else {
             console.error("❌ Unexpected response from server:", data);
             alert("There was an unexpected response from the server. Please try again.");
