@@ -27,6 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         console.error("❌ Password input or error message not found in DOM");
     }
+// ✅ Defensively hide confirmation message in case it's lingering from a previous state
+const confirmationBox = document.getElementById("confirmationMessage");
+if (confirmationBox) confirmationBox.style.display = "none";
 
     // ✅ Calendar Logic
     let dateRangeInput = document.getElementById("dateRange");
@@ -318,7 +321,7 @@ function sendRequest() {
         if (data.includes("Booking Saved")) {
             console.log("✅ Booking successfully saved in the Bookings sheet.");
             document.getElementById("summary").style.display = "none";
-            document.getElementById("confirmationMessage").style.display = "none";
+            document.getElementById("confirmationMessage").style.display = "block";
         } else {
             console.error("❌ Unexpected response from server:", data);
             alert("There was an unexpected response from the server. Please try again.");
