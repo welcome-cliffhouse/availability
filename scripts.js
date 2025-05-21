@@ -286,6 +286,7 @@ function updateSummary(dates) {
     document.getElementById("summary").style.display = "block";
     document.getElementById("request").style.display = "block";
 }
+});
 
 function sendRequest() {
     console.log("📤 Sending booking request...");
@@ -372,7 +373,8 @@ function sendRequest() {
 
 
 
-});
+
+
 
 
 
