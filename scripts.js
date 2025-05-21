@@ -205,7 +205,7 @@ function initCalendar(dateRangeInput) {
     });
     console.log("✅ Calendar initialized");
 }
-
+});
 function updateSummary(dates) {
     if (!dates || dates.length < 2) return;
 
@@ -286,7 +286,7 @@ function updateSummary(dates) {
     document.getElementById("summary").style.display = "block";
     document.getElementById("request").style.display = "block";
 }
-});
+
 
 function sendRequest() {
     console.log("📤 Sending booking request...");
