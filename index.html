@@ -191,32 +191,33 @@ body.locked * {
     bottom: 5vh;
     left: 50%;
     transform: translateX(-50%);
-    padding: 16px 24px;
-    font-size: 20px;
-    font-weight: 600;
-    color: #FFFFFF;
-    background-color: #A6793E;
+    padding: 10px 28px;
+    font-size: 18px;
+    font-family: 'Arapey', serif;
+    font-style: italic;
+    color: #000;
+    background-color: #fcf3ca;
     border: none;
-    border-radius: 999px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     cursor: pointer;
-    z-index: 10;
-    transition: all 0.25s ease;
-    width: 85vw;
+    transition: all 0.3s ease;
+    width: auto;
     max-width: 300px;
+    text-align: center;
   }
 
   #availabilityButton:hover,
-  #availabilityButton:focus {
-    background-color: #C89D7B;
-    transform: translateX(-50%) scale(1.05);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
-  }
+#availabilityButton:focus {
+    border-color: #ffe599;
+    box-shadow: 0 0 8px rgba(252, 243, 202, 0.6);
+    transform: translateX(-50%) scale(1.03);
+}
 
-  #availabilityButton:active {
-    background-color: #8A5E2D;
+#availabilityButton:active {
     transform: translateX(-50%) scale(0.97);
-  }
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
 
 
 
