@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        
+
 // ✅ Defensively hide confirmation message in case it's lingering from a previous state
 const confirmationBox = document.getElementById("confirmationMessage");
 if (confirmationBox) confirmationBox.style.display = "none";
@@ -122,7 +122,7 @@ if (confirmationBox) confirmationBox.style.display = "none";
         .catch(error => {
             console.error("⚠️ Error fetching promo codes:", error);
         });
-});
+
 
 // ✅ Password Verification Logic
 function verifyPassword(passwordInput, errorMessage) {
