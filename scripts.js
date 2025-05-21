@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+});
 
 // ✅ Defensively hide confirmation message in case it's lingering from a previous state
 const confirmationBox = document.getElementById("confirmationMessage");
