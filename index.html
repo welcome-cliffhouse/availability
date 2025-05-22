@@ -75,7 +75,7 @@
     text-align: center;
     margin-bottom: 20px;
     letter-spacing: 2px;
-    border: 2px solid #b66328;
+    border: none;
 }
 
 /* Password Input */
@@ -92,14 +92,16 @@
     text-align: center;
     overflow: visible;  /* Ensure the full text is shown */
     background-color: #fcf3ca;
-    transition: border-color 0.3s;
     margin-bottom: 15px;
     line-height: 1.2;
     box-sizing: border-box; /* Ensure padding is included in width */
-    border: 2px solid transparent;  /* Prevent default inset border */
-    box-shadow: none !important;    /* Kill weird Safari glow */
-    -webkit-appearance: none;       /* Normalize base rendering */
+    border: 2px solid transparent;
+    box-shadow: none !important;
+    -webkit-appearance: none;
     appearance: none;
+    will-change: transform; /* smooth animation + Safari rendering fix */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+
 }
 
 /* Placeholder Text */
