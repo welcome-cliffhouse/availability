@@ -178,7 +178,11 @@ function verifyPassword(passwordInput, errorMessage) {
         passwordSubmitted = false; // 🔁 Re-enable if failed
     });
 }
-
+function submitPassword() {
+    const input = document.getElementById("passwordInput");
+    verifyPassword(input.value);
+  }
+  
 // ✅ Calendar Initialization Logic
 function initCalendar(dateRangeInput) {
     flatpickr(dateRangeInput, {
@@ -371,7 +375,16 @@ function sendRequest() {
     });
 }
 
-
+function simulateEnter() {
+    const input = document.getElementById('passwordInput');
+    const event = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true
+    });
+    input.dispatchEvent(event);
+  }
+  
 
 
 
