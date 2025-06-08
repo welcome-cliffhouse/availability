@@ -124,6 +124,41 @@
     line-height: 1.2;  /* Match the line height */
     
 }
+#submitPassword {
+    background-color: #fcf3ca;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    font-family: 'Arapey', serif;
+    font-style: italic;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* optional but good for mobile alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* optional but good for mobile alignment */
+}
+#submitPassword::before {
+  content: '➤';
+  font-size: 20px;
+  color: #000;
+  transform: translateX(1px);
+  font-family: 'Arapey', serif;
+}
+
+#submitPassword:hover {
+    box-shadow: 0 0 8px rgba(252, 243, 202, 0.6);
+    transform: scale(1.05);
+}
 
 /* Hover Effect */
 #passwordContainer input:hover {
@@ -743,7 +778,9 @@ body.locked * {
                 placeholder="What's the password?"
                 autocomplete="off"
                 />
-            <p id="errorMessage">Password not found</p>
+                <button id="submitPassword" onclick="simulateEnter()" aria-label="Submit password"></button>
+
+                <p id="errorMessage">Password not found</p>
         </div>
     </div>
     
