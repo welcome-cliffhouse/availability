@@ -141,24 +141,29 @@ function verifyPassword(passwordInput, errorMessage) {
     function simulateEnter() {
         const passwordInput = document.getElementById("passwordInput");
         const errorMessage = document.getElementById("errorMessage");
-    
+      
         if (!passwordInput.disabled && !passwordSubmitted) {
-            passwordSubmitted = true;
-    
-            console.log("🖱️ Submit button clicked — triggering password logic");
-    
-            setTimeout(() => {
-                if (passwordSubmitted) {
-                    console.warn("⏱️ Resetting passwordSubmitted after 10s timeout.");
-                    passwordSubmitted = false;
-                }
-            }, 10000);
-    
-            verifyPassword(passwordInput, errorMessage);
+          passwordSubmitted = true;
+      
+          console.log("🖱️ Submit button clicked — triggering password logic");
+      
+          setTimeout(() => {
+            if (passwordSubmitted) {
+              console.warn("⏱️ Resetting passwordSubmitted after 10s timeout.");
+              passwordSubmitted = false;
+            }
+          }, 10000);
+      
+          verifyPassword(passwordInput, errorMessage);
         } else {
-            console.warn("⛔ Button click ignored due to disabled input or already submitted");
+          console.warn("⛔ Button click ignored due to disabled input or already submitted");
         }
-    }
+      }
+      const submitButton = document.getElementById("submitPassword");
+if (submitButton) {
+  submitButton.addEventListener("click", simulateEnter);
+}
+
     
     if (enteredPassword === "") return;  // Prevent empty submission
 
