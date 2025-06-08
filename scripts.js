@@ -9,12 +9,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordOverlay = document.getElementById("passwordOverlay");
     const passwordInput = document.getElementById("passwordInput");
     const errorMessage = document.getElementById("errorMessage");
+    const submitButton = document.getElementById("submitPassword");
 
     if (passwordOverlay) {
         passwordOverlay.style.display = "flex";
     }
 
-    if (passwordInput && errorMessage) {
+    // ✅ Define button click logic BEFORE attaching listener
+    function simulateEnter() {
+        console.log("✅ Button clicked");  // 👈 Add this here
+        if (!passwordInput.disabled && !passwordSubmitted) {
+            passwordSubmitted = true;
+    
+            console.log("🖱️ Submit button clicked — triggering password logic");
+    
+            // Reset after timeout (not blocking main call)
+            setTimeout(() => {
+                if (passwordSubmitted) {
+                    console.warn("⏱️ Resetting passwordSubmitted after 10s timeout.");
+                    passwordSubmitted = false;
+                }
+            }, 10000);
+    
+            // ✅ This must be outside the timeout!
+            verifyPassword(passwordInput, errorMessage);
+    
+        } else {
+            console.warn("⛔ Button click ignored due to disabled input or already submitted");
+        }
+    }
+    
+
+    // ✅ Attach click listener to submit button
+    if (submitButton) {
+        submitButton.addEventListener("click", simulateEnter);
+    }
+
+    
+
+      // ✅ Handle Enter key
+      if (passwordInput && errorMessage) {
         passwordInput.addEventListener("focus", () => {
             errorMessage.style.display = "none";
             passwordInput.classList.remove("shake");
@@ -45,6 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+    
+
+    
 
 
 // ✅ Defensively hide confirmation message in case it's lingering from a previous state
@@ -138,31 +175,8 @@ function verifyPassword(passwordInput, errorMessage) {
         console.warn("⛔ Empty password field — skipping fetch");
         return;
     }
-    function simulateEnter() {
-        const passwordInput = document.getElementById("passwordInput");
-        const errorMessage = document.getElementById("errorMessage");
-      
-        if (!passwordInput.disabled && !passwordSubmitted) {
-          passwordSubmitted = true;
-      
-          console.log("🖱️ Submit button clicked — triggering password logic");
-      
-          setTimeout(() => {
-            if (passwordSubmitted) {
-              console.warn("⏱️ Resetting passwordSubmitted after 10s timeout.");
-              passwordSubmitted = false;
-            }
-          }, 10000);
-      
-          verifyPassword(passwordInput, errorMessage);
-        } else {
-          console.warn("⛔ Button click ignored due to disabled input or already submitted");
-        }
-      }
-      const submitButton = document.getElementById("submitPassword");
-if (submitButton) {
-  submitButton.addEventListener("click", simulateEnter);
-}
+    
+     
 
     
     if (enteredPassword === "") return;  // Prevent empty submission
@@ -204,10 +218,8 @@ if (submitButton) {
         passwordSubmitted = false; // 🔁 Re-enable if failed
     });
 }
-function submitPassword() {
-    const input = document.getElementById("passwordInput");
-    verifyPassword(input.value);
-  }
+
+
   
 // ✅ Calendar Initialization Logic
 function initCalendar(dateRangeInput) {
