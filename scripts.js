@@ -376,14 +376,21 @@ function sendRequest() {
 }
 
 function simulateEnter() {
-    const input = document.getElementById('passwordInput');
-    const event = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      bubbles: true,
-      cancelable: true
-    });
-    input.dispatchEvent(event);
+    const passwordInput = document.getElementById("passwordInput");
+    const errorMessage = document.getElementById("errorMessage");
+  
+    if (!passwordInput.disabled && !passwordSubmitted) {
+      passwordSubmitted = true;
+  
+      setTimeout(() => {
+        if (passwordSubmitted) passwordSubmitted = false;
+      }, 10000);
+  
+      verifyPassword(passwordInput, errorMessage);
+    }
   }
+  
+  
   
 
 
