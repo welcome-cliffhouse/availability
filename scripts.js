@@ -228,7 +228,7 @@ function initCalendar(dateRangeInput) {
         dateFormat: "Y-m-d",
         minDate: "today",
         enable: availableDates.map(d => d.date),
-        
+
         onDayCreate: function(dObj, dStr, fp, dayElem) {
             const dateStr = dayElem.dateObj.toISOString().split('T')[0];
             if (rateMap[dateStr]) {
@@ -238,15 +238,44 @@ function initCalendar(dateRangeInput) {
                 dayElem.appendChild(priceTag);
             }
         },
-        
+
         onChange: (selectedDates) => {
             if (selectedDates.length === 2) {
+                const [start, end] = selectedDates;
+                const totalNights = (end - start) / (1000 * 60 * 60 * 24);
+
+                // ✅ 2-night minimum check
+                if (totalNights < 2) {
+                    alert("Your stay must be at least 2 nights. Please select a longer range.");
+                    dateRangeInput._flatpickr.clear();
+                    return;
+                }
+
+                // ✅ Blocked date check
+                const selectedRange = [];
+                for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+                    const dateStr = d.toISOString().split('T')[0];
+                    selectedRange.push(dateStr);
+                }
+
+                const allowedDates = availableDates.map(d => d.date);
+                const hasBlockedDate = selectedRange.some(date => !allowedDates.includes(date));
+
+                if (hasBlockedDate) {
+                    alert("Your selected range includes one or more unavailable dates. Please choose a different range.");
+                    dateRangeInput._flatpickr.clear();
+                    return;
+                }
+
+                // ✅ Passed all checks, update summary
                 updateSummary(selectedDates);
             }
         }
     });
-    console.log("✅ Calendar initialized");
+
+    console.log("✅ Calendar initialized with 2-night minimum and blocked date check");
 }
+
 });
 function updateSummary(dates) {
     if (!dates || dates.length < 2) return;
