@@ -7,8 +7,21 @@
     <script>
       const params = new URLSearchParams(window.location.search);
       const row = params.get("row");
+
       if (row) {
-        window.location.href = `https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?row=${row}`;
+        fetch(`https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?mode=getLink&row=${row}`)
+          .then(response => response.text())
+          .then(link => {
+            if (link && link.startsWith("http")) {
+              window.location.href = link;
+            } else {
+              document.body.innerHTML = "<h2>⚠️ Booking link not found.</h2>";
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            document.body.innerHTML = "<h2>⚠️ Error fetching booking link.</h2>";
+          });
       } else {
         document.body.innerHTML = "<h2>⚠️ Missing row number.</h2>";
       }
