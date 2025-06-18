@@ -1,0 +1,20 @@
+<!-- /public/check.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checking your booking...</title>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const row = params.get("row");
+      if (row) {
+        window.location.href = `https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec?row=${row}`;
+      } else {
+        document.body.innerHTML = "<h2>⚠️ Missing row number.</h2>";
+      }
+    </script>
+  </head>
+  <body>
+    <p>🔄 Redirecting to your booking page...</p>
+  </body>
+</html>
