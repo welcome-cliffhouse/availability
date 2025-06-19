@@ -1,48 +1,67 @@
-// middleware.js
-import { NextResponse } from '@vercel/edge';
+// middleware.js (Vercel Server-side Password Protection)
 
-export const config = {
-  runtime: 'edge',                       // ← tell Vercel to use its Edge Functions
-  matcher: ['/((?!check\\.html|api).*)'] // ← protect everything except /check.html & /api/*
-};
-
+// Use the existing password check via Apps Script
 async function verifyVIPPhone(phone) {
-  const url    = 'https://script.google.com/macros/s/…/exec';
-  const params = new URLSearchParams({ mode: 'password', password: phone });
-  try {
-    const res = await fetch(`${url}?${params}`);
-    return (await res.text()).trim() === 'success';
-  } catch {
-    return false;
+    const url = 'https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec';
+    const params = new URLSearchParams({
+      mode: 'password',
+      password: phone
+    }).toString();
+  
+    try {
+      console.log(`🔄 Fetching URL: ${url}?${params}`);
+      const response = await fetch(`${url}?${params}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Accept': 'text/plain',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+  
+      console.log(`📝 Response Status: ${response.status}`);
+      const data = await response.text();
+      console.log(`🔐 Password verification response: ${data}`);
+      return data.trim() === 'success';
+    } catch (error) {
+      console.error(`❌ Failed to verify VIP phone: ${error.message}`);
+      return false;
+    }
   }
-}
-
-export default async function middleware(request) {
-  const url = new URL(request.url);
-  // 1) Always let check.html and any /api/* through
-  if (url.pathname === '/check.html' || url.pathname.startsWith('/api/')) {
-    return NextResponse.next();
+  
+  // Middleware function
+  export default function middleware(req, res, next) {
+    try {
+      const authHeader = req.headers.authorization || '';
+      const base64Credentials = authHeader.split(' ')[1] || '';
+      const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
+      const [phone] = credentials.split(':');
+  
+      console.log(`🛂 Attempting to verify phone: ${phone}`);
+  
+      verifyVIPPhone(phone).then(isVIP => {
+        if (isVIP) {
+          console.log(`✅ Access granted for phone: ${phone}`);
+          next();
+        } else {
+          console.log(`❌ Access denied for phone: ${phone}`);
+          res.setHeader('WWW-Authenticate', 'Basic realm="Cliff House"');
+          res.status(401).send('🚫 Unauthorized - Please enter a valid phone number.');
+        }
+      }).catch(error => {
+        console.error(`❌ Middleware error: ${error.message}`);
+        res.status(500).send('🚫 Internal Server Error');
+      });
+    } catch (error) {
+      console.error(`❌ Middleware processing error: ${error.message}`);
+      res.status(500).send('🚫 Internal Server Error');
+    }
   }
-
-  // 2) Otherwise enforce Basic auth
-  const auth = request.headers.get('authorization') || '';
-  const [scheme, creds] = auth.split(' ');
-  if (scheme !== 'Basic' || !creds) {
-    return new NextResponse('Unauthorized', {
-      status: 401,
-      headers: { 'WWW-Authenticate': 'Basic realm="Cliff House"' }
-    });
-  }
-
-  // 3) Decode the phone number
-  const phone = atob(creds).split(':')[0];
-  if (await verifyVIPPhone(phone)) {
-    return NextResponse.next();
-  }
-
-  // 4) Deny if not VIP
-  return new NextResponse('Unauthorized', {
-    status: 401,
-    headers: { 'WWW-Authenticate': 'Basic realm="Cliff House"' }
-  });
-}
+  
+  export const config = {
+    matcher: [
+      // protect everything except check.html and your API routes
+      '/((?!check\\.html|api).*)'
+    ]
+  };
+  
