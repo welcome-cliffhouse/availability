@@ -58,7 +58,5 @@ export default function middleware(req, res, next) {
         res.status(500).send('🚫 Internal Server Error');
     }
 }
-export const config = {
-    matcher: ["/((?!check\\.html).*)"], // Exclude /check.html from middleware
-  };
+
   
