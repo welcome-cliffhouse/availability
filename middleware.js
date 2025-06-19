@@ -1,62 +1,51 @@
-// middleware.js (Vercel Server-side Password Protection)
+// middleware.js
+import { NextResponse } from 'next/server';
 
-// Use the existing password check via Apps Script
 async function verifyVIPPhone(phone) {
-    const url = 'https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec';
-    const params = new URLSearchParams({
-        mode: 'password',
-        password: phone
-    }).toString();
-
-    try {
-        console.log(`🔄 Fetching URL: ${url}?${params}`);
-        const response = await fetch(`${url}?${params}`, {
-            method: 'GET',
-            mode: 'cors',  // ✅ Critical for cross-origin requests
-            headers: {
-                'Accept': 'text/plain',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
-
-        console.log(`📝 Response Status: ${response.status}`);
-        console.log(`📝 Response Headers:`, response.headers);
-        const data = await response.text();
-        console.log(`🔐 Password verification response: ${data}`);
-        return data.trim() === 'success';
-    } catch (error) {
-        console.error(`❌ Failed to verify VIP phone: ${error.message}`);
-        return false;
-    }
+  const url = 'https://script.google.com/macros/s/AKfycbz7JwasPrxOnuEfz7ouNfve2KAoueOpmefuEUYnbCsYLE2TfD2zX5CBzvHdQgSEyQp7-g/exec';
+  const params = new URLSearchParams({ mode: 'password', password: phone });
+  try {
+    const res = await fetch(`${url}?${params}`);
+    return (await res.text()).trim() === 'success';
+  } catch {
+    return false;
+  }
 }
 
-// Middleware function
-export default function middleware(req, res, next) {
-    try {
-        const authHeader = req.headers.authorization || '';
-        const base64Credentials = authHeader.split(' ')[1] || '';
-        const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
-        const [phone, password] = credentials.split(':');
+export async function middleware(req) {
+  const { pathname } = new URL(req.url);
 
-        console.log(`🛂 Attempting to verify phone: ${phone}`);
+  // 1) Let the static wrapper and any API calls through
+  if (pathname === '/check.html' || pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
 
-        verifyVIPPhone(phone).then(isVIP => {
-            if (isVIP) {
-                console.log(`✅ Access granted for phone: ${phone}`);
-                next();
-            } else {
-                console.log(`❌ Access denied for phone: ${phone}`);
-                res.setHeader('WWW-Authenticate', 'Basic realm="Cliff House"');
-                res.status(401).send('🚫 Unauthorized - Please enter a valid phone number.');
-            }
-        }).catch(error => {
-            console.error(`❌ Middleware error: ${error.message}`);
-            res.status(500).send('🚫 Internal Server Error');
-        });
-    } catch (error) {
-        console.error(`❌ Middleware processing error: ${error.message}`);
-        res.status(500).send('🚫 Internal Server Error');
-    }
+  // 2) Otherwise require Basic auth: "Authorization: Basic base64(phone:)"
+  const auth = req.headers.get('authorization') || '';
+  const [scheme, creds] = auth.split(' ');
+  if (scheme !== 'Basic' || !creds) {
+    return new NextResponse('Unauthorized', {
+      status: 401,
+      headers: { 'WWW-Authenticate': 'Basic realm="Cliff House"' }
+    });
+  }
+
+  // 3) Decode the phone number and verify it via Apps Script
+  const phone = atob(creds).split(':')[0];
+  if (await verifyVIPPhone(phone)) {
+    return NextResponse.next();
+  }
+
+  // 4) Reject if not VIP
+  return new NextResponse('Unauthorized', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="Cliff House"' }
+  });
 }
 
-  
+export const config = {
+  matcher: [
+    // protect every path except /check.html and /api/*
+    '/((?!check\\.html|api).*)'
+  ]
+};
