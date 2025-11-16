@@ -1,6 +1,0 @@
-{
-    "middleware": {
-      "excludedRoutes": ["/check.html"]
-    }
-  }
-  
