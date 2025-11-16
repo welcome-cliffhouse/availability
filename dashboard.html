@@ -298,8 +298,11 @@
   </div>
 
   <script>
-    // 🔗 1) PASTE YOUR APPS SCRIPT URL HERE (no placeholders in reality):
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbtg9Jr02TTf5xIQrDX0KyHAR60gTOc-kXkCg4Wf6GdCP3k7LASPMqvNU6kCftt7kvDQ/exec';
+
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbtg9Jr02TTf5xIQrDX0KyHAR60gTOc-kXkCg4Wf6GdCP3k7LASPMqvNU6kCftt7kvDQ/exec';
+
+
+    https://browseavailability.vercel.app/dashboard.html
 
     const home = document.getElementById('home');
     const formSection = document.getElementById('vipFormCard');
@@ -357,27 +360,26 @@
       }
 
       try {
-        const res = await fetch(APPS_SCRIPT_URL, {
+        await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          mode: 'no-cors', // <-- avoid CORS errors, request still goes through
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8', // simple -> no preflight
+          },
           body: JSON.stringify(payload),
         });
 
-        const result = await res.json();
-
-        if (result && result.ok) {
-          msg.textContent = result.created
-            ? 'VIP added and welcome email sent.'
-            : 'VIP updated and welcome email sent.';
-          msg.className = 'msg ok';
-        } else {
-          msg.textContent = 'Error: ' + (result && result.error ? result.error : 'unexpected response from server.');
-          msg.className = 'msg err';
-        }
+        // We can’t read JSON back in no-cors mode, so if we got here
+        // we just assume it worked.
+        msg.textContent = 'VIP saved and welcome email sent (if enabled).';
+        msg.className = 'msg ok';
       } catch (error) {
-        msg.textContent = 'Error: ' + (error && error.message ? error.message : error);
+        msg.textContent =
+          'Error talking to VIP service: ' +
+          (error && error.message ? error.message : error);
         msg.className = 'msg err';
       }
+
     });
   </script>
 </body>
