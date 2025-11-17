@@ -298,18 +298,16 @@
   </div>
 
   <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbtg9Jr02TTf5xIQrDX0KyHAR60gTOc-kXkCg4Wf6GdCP3k7LASPMqvNU6kCftt7kvDQ/exec';
 
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbtg9Jr02TTf5xIQrDX0KyHAR60gTOc-kXkCg4Wf6GdCP3k7LASPMqvNU6kCftt7kvDQ/exec';
-
-
-    https://browseavailability.vercel.app/dashboard.html
-
-    const home = document.getElementById('home');
+    const home        = document.getElementById('home');
     const formSection = document.getElementById('vipFormCard');
-    const openVip = document.getElementById('openVip');
-    const backHome = document.getElementById('backHome');
-    const form = document.getElementById('vipForm');
-    const msg = document.getElementById('msg');
+    const openVip     = document.getElementById('openVip');
+    const backHome    = document.getElementById('backHome');
+    const form        = document.getElementById('vipForm');
+    const msg         = document.getElementById('msg');
+
+    console.log('[VIP DASHBOARD] script loaded');
 
     function showForm() {
       home.classList.add('hidden');
@@ -362,15 +360,13 @@
       try {
         await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors', // <-- avoid CORS errors, request still goes through
+          mode: 'no-cors',
           headers: {
-            'Content-Type': 'text/plain;charset=utf-8', // simple -> no preflight
+            'Content-Type': 'text/plain;charset=utf-8',
           },
           body: JSON.stringify(payload),
         });
 
-        // We can’t read JSON back in no-cors mode, so if we got here
-        // we just assume it worked.
         msg.textContent = 'VIP saved and welcome email sent (if enabled).';
         msg.className = 'msg ok';
       } catch (error) {
@@ -379,7 +375,6 @@
           (error && error.message ? error.message : error);
         msg.className = 'msg err';
       }
-
     });
   </script>
 </body>
